@@ -10,7 +10,7 @@ const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Dieses Feld ist erforderlich!
       </div>
     );
   }
@@ -20,7 +20,7 @@ const email = value => {
   if (!isEmail(value)) {
     return (
       <div className="alert alert-danger" role="alert">
-        This is not a valid email.
+        Dies ist keine gültige E-Mail.
       </div>
     );
   }
@@ -30,7 +30,7 @@ const vusername = value => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+        Der Benutzername muss zwischen 3 und 20 Zeichen lang sein.
       </div>
     );
   }
@@ -40,7 +40,7 @@ const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+        Das Passwort muss zwischen 6 und 40 Zeichen lang sein.
       </div>
     );
   }
@@ -175,7 +175,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button className="btn btn-primary btn-block">Registrieren</button>
                 </div>
               </div>
             )}
