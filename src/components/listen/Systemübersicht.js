@@ -19,18 +19,26 @@ export default class Systemuebersichtsliste extends Component {
             currentIndex: -1,
             showPopup: false,
             currentStandort: undefined,
-            filteredSysteme: []
+            filteredSysteme: [] //erstellt Array für gefilterte Systeme nach kw_id
         };
     }
 
     componentDidMount() {
+
 
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
         if (kraftwerk) {
             this.setState({
                 currentStandort: kraftwerk,
-                filteredSysteme: kraftwerk.kw_id
+            });
+        }
+
+        const fsysteme = SystemDataService.getCurrentSysteme();
+
+        if (fsysteme) {
+            this.setState({
+                filteredSysteme: fsysteme,
             });
         }
 
@@ -58,19 +66,19 @@ export default class Systemuebersichtsliste extends Component {
         });
     }
 
-    setActiveSystem(systeme, index) {
+    setActiveSystem(filteredSysteme, index) {
         this.setState({
-            aktuellesSystem: systeme,
+            aktuellesSystem: filteredSysteme,
             currentIndex: index,
         });
     }
 
-    handleView(systeme, index) {
+    handleView(filteredSysteme, index) {
 
         this.setState({
             currentIndex: index,
             viewMode: true,
-            aktuellesSystem: systeme
+            aktuellesSystem: filteredSysteme
         });
     }
 
@@ -85,7 +93,8 @@ export default class Systemuebersichtsliste extends Component {
     render() {
         const { systeme, aktuellesSystem, currentIndex, currentStandort, filteredSysteme } = this.state;
 
-        const totalSysteme = systeme.length;
+
+        const totalSysteme = filteredSysteme.length;
 
 
         if (totalSysteme === 0) return null;
@@ -117,24 +126,23 @@ export default class Systemuebersichtsliste extends Component {
                                 <h3 style={h3}>Systemübersicht: {currentStandort.kraftwerk_name}</h3>
                             </div>
                             {SystemDataService.getSystembyKw_ID(parseInt(currentStandort.kw_id)) ? (
-                                console.log(SystemDataService.getSystembyKw_ID(parseInt(currentStandort.kw_id))),
-                                    console.log(filteredSysteme),
+                                console.log(filteredSysteme),
                                 <>
                                     <strong>{totalSysteme}</strong> Systeme
                                     <Row>
                                         <div className="col-md-6">
                                             <ul className="list-group">
-                                                {systeme &&
-                                                    systeme.map((systeme, index) => (
+                                                {filteredSysteme &&
+                                                    filteredSysteme.map((filteredSysteme, index) => (
                                                         <li
                                                             className={
                                                                 "list-group-item " +
                                                                 (index === currentIndex ? "active" : "")
                                                             }
-                                                            onClick={() => this.setActiveSystem(systeme, index)}
+                                                            onClick={() => this.setActiveSystem(filteredSysteme, index)}
                                                             key={index}
                                                         >
-                                                            {systeme.system_name}
+                                                            {filteredSysteme.system_name}
                                                         </li>
                                                     ))}
                                             </ul>

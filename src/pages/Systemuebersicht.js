@@ -42,12 +42,7 @@ class Systemuebersicht extends React.Component {
                     <Row>
                         <Col lg={12} style={hauptbox}>
                             <div>
-                                <h3>gefilterte Liste</h3>
                                 <Systemuebersichtsliste/>
-                            </div>
-                            <div>
-                                <h3>ungefilterte Liste</h3>
-                                <Systemliste/>
                             </div>
                         </Col>
                         <Container>
