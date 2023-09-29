@@ -8,11 +8,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {BsGearFill} from "@react-icons/all-files/bs/BsGearFill";
 import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
+import KraftwerkeDataService from "../../services/kraftwerk.service";
+import SystemherstellerDataService from "../../services/systemhersteller.service";
 export default class ITElementMitFilterUndDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            it_element: [],
             aktuellesIT_Element: {
                 it_element_id: null,
                 kks: "",
@@ -36,7 +37,9 @@ export default class ITElementMitFilterUndDetails extends Component {
             betriebssystemFilter: "",
             herstellerFilter: "",
             modellFilter: "",
-            totalIT_Elemente: 0
+            totalIT_Elemente: 0,
+            filteredKomopnenten: [], //erstellt Array für gefilterte Komponenten nach kw_id
+            currentStandort: undefined,
         };
         this.handleCancel = this.handleCancel.bind(this);
         this.handleView = this.handleView.bind(this);
@@ -44,7 +47,6 @@ export default class ITElementMitFilterUndDetails extends Component {
 
         this.updateKomponenten = this.updateKomponenten.bind(this);
         this.deleteKomponente = this.deleteKomponente.bind(this);
-        this.retrieveIT_Element = this.retrieveIT_Element.bind(this);
 
         this.onChangeKKS = this.onChangeKKS.bind(this);
         this.onChangeKurztext = this.onChangeKurztext.bind(this);
@@ -148,10 +150,7 @@ export default class ITElementMitFilterUndDetails extends Component {
     }
 
     updateKomponenten() {
-        KomponentDataService.update(
-            this.state.aktuellesIT_Element.it_element_id,
-            this.state.aktuellesIT_Element
-        )
+        KomponentDataService.update()
             .then(response => {
                 console.log(response.data);
                 this.setState({
@@ -163,18 +162,18 @@ export default class ITElementMitFilterUndDetails extends Component {
             });
     }
 
-    deleteKomponente() {
-        KomponentDataService.delete(this.state.aktuellesIT_Element.it_element_id)
+    deleteKomponente(it_element_id) {
+        KomponentDataService.deleteKomponenteByID(it_element_id)
             .then(response => {
-                console.log(response.data);
-                this.setState({
-                    message: "Komponente" + response.data.kks + " gelöscht!"
-                });
-                this.props.router.navigate('/komponentenuebersicht');
+                // Handle success
+                console.log(response);
+                window.location.reload();
             })
-            .catch(e => {
-                console.log(e);
+            .catch(error => {
+                // Handle error
+                console.log(error);
             });
+
     }
 
     handleView(index) {
@@ -182,7 +181,7 @@ export default class ITElementMitFilterUndDetails extends Component {
         this.setState({
             currentIndex: index,
             viewMode: true,
-            aktuellesIT_Element: { ...this.state.it_element[index] }
+            aktuellesIT_Element: { ...this.state.filteredKomopnenten[index] }
         });
     }
 
@@ -191,7 +190,7 @@ export default class ITElementMitFilterUndDetails extends Component {
         this.setState({
             currentIndex: index,
             viewMode2: true,
-            aktuellesIT_Element: { ...this.state.it_element[index] }
+            aktuellesIT_Element: { ...this.state.filteredKomopnenten[index] }
         });
     }
 
@@ -199,27 +198,39 @@ export default class ITElementMitFilterUndDetails extends Component {
         this.setState({
             currentIndex: -1,
             viewMode: false,
+            viewMode2: false,
             aktuellesIT_Element: {}
         });
         e.preventDefault();
     }
 
     componentDidMount(){
-        this.retrieveIT_Element();
+        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
-    }
-
-    retrieveIT_Element() {
-        KomponentDataService.getAll()
-            .then(response => {
-                this.setState({
-                    it_element: response.data
-                });
-                console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
+        if (kraftwerk) {
+            this.setState({
+                currentStandort: kraftwerk.kraftwerk_name,
             });
+        }
+
+        const filteredkomponenten = KomponentDataService.getCurrentKomponente();
+
+        if (kraftwerk.kw_id == 7) {
+            KomponentDataService.getAll()
+                .then(response => {
+                    this.setState({
+                        filteredKomopnenten: response.data
+                    });
+                    console.log(response.data);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        }else {
+            this.setState({
+            filteredKomopnenten: filteredkomponenten,
+        });}
+
     }
 
     handleKksFilterChange = (e) => {
@@ -300,9 +311,9 @@ export default class ITElementMitFilterUndDetails extends Component {
     }
 
     render() {
-        const { kksFilter, systemFilter,systemeinheitFilter,betriebssystemFilter, it_element } = this.state;
+        const { kksFilter, systemFilter,systemeinheitFilter,betriebssystemFilter, filteredKomopnenten } = this.state;
 
-        const filteredData = it_element.filter((dt) => dt.kks.toLowerCase().includes(kksFilter.toLowerCase())
+        const filteredData = filteredKomopnenten.filter((dt) => dt.kks.toLowerCase().includes(kksFilter.toLowerCase())
             && dt.systemeinheit_id.systemeinheit_name.toLowerCase().includes(systemeinheitFilter.toLowerCase())
             && dt.betriebssystem_id.betriebssystem_name.toLowerCase().includes(betriebssystemFilter.toLowerCase())
             && dt.system_id.system_name.toLowerCase().includes(systemFilter.toLowerCase()));
@@ -319,6 +330,10 @@ export default class ITElementMitFilterUndDetails extends Component {
         const tabs ={
             color: '#161616',
             border: "5px"
+        }
+
+        const view ={
+            color: "#000"
         }
 
         const tab ={
@@ -505,6 +520,7 @@ export default class ITElementMitFilterUndDetails extends Component {
                             className={
                                 "modal " + (this.state.viewMode2 ? "displayBlock" : "displayNone")
                             }
+                            style={view}
                         >
                             <div className="modal-content">
                                 <Row>

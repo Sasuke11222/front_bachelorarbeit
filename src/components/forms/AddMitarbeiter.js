@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import MitarbeiterDataService from "../../services/mitarbeiter.service";
+import KraftwerkeDataService from "../../services/kraftwerk.service";
 import {Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import axios from "axios";
@@ -20,9 +21,11 @@ const required = value => {
 };
 
 export default class AddMitarbeiter extends Component {
+
     constructor(props) {
         super(props);
         this.handleMitarbeiter = this.handleMitarbeiter.bind(this);
+        this.handleChangeKW_ID = this.handleChangeKW_ID.bind(this);
         this.onChangeNachname = this.onChangeNachname.bind(this);
         this.onChangeVorname = this.onChangeVorname.bind(this);
         this.onChangeAbteilung = this.onChangeAbteilung.bind(this);
@@ -35,7 +38,7 @@ export default class AddMitarbeiter extends Component {
             abteilung: "",
             telefon: "",
             mail: "",
-            kw_id: null,
+            kw_id: '',
             kraftwerk_name: "",
             successful: false,
             message: ""
@@ -48,8 +51,8 @@ export default class AddMitarbeiter extends Component {
         const data = res.data
 
         const options = data.map(d => ({
-            "kw_id" : d.kw_id,
-            "kraftwerk_name" : d.kraftwerk_name,
+            kw_id : d.kw_id,
+            kraftwerk_name : d.kraftwerk_name,
 
         }))
         this.setState({kraftwerk: options})
@@ -59,6 +62,15 @@ export default class AddMitarbeiter extends Component {
     }
 
     componentDidMount(){
+
+        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerkforMitarbeiter();
+
+        if (kraftwerk) {
+            this.setState({
+                kw_id: kraftwerk.kw_id,
+                kraftwerk_name: kraftwerk.kraftwerk_name
+            });
+        }
         this.getOptions()
     }
 
@@ -92,7 +104,8 @@ export default class AddMitarbeiter extends Component {
         });
     }
 
-    handleChange(e){
+
+    handleChangeKW_ID(e){
         this.setState({kw_id:e.kw_id, kraftwerk_name:e.kraftwerk_name})
     }
 
@@ -108,13 +121,14 @@ export default class AddMitarbeiter extends Component {
         this.form.validateAll();
 
         if (this.checkBtn.context._errors.length === 0) {
-            MitarbeiterDataService.create(
+            KraftwerkeDataService.getCurrentKraftwerkforMitarbeiter(this.state.kw_id);
+            MitarbeiterDataService.createMitarbeiter(
                 this.state.nachname,
                 this.state.vorname,
                 this.state.abteilung,
                 this.state.telefon,
                 this.state.mail,
-                this.state.kw_id,
+                parseInt(this.state.kw_id),
             ).then(
                 response => {
                     this.setState({
@@ -144,6 +158,8 @@ export default class AddMitarbeiter extends Component {
             color: '#FFF',
             textDecoration: "none"
         }
+
+        const {kw_id} = this.state;
 
         return (
             <div>
@@ -233,20 +249,12 @@ export default class AddMitarbeiter extends Component {
                                     </div>
 
                                     <div className="form-group">
-                                        <label htmlFor="kw_id">Kraftwerk:</label>
+                                        <label htmlFor="kw_id">Kraftwerk: {kw_id}</label>
                                         <Select
                                             placeholder={"Kraftwerk"}
                                             options={this.state.kraftwerk}
-                                            value={this.state.kw_id}
-                                            theme={(theme) => ({
-                                                ...theme,
-                                                borderRadius: 0,
-                                                colors: {
-                                                    ...theme.colors,
-                                                    text: 'black',
-                                                },
-                                            })}
-                                            onChange={this.handleChange.bind(this)} />
+                                            value={kw_id}
+                                            onChange={this.handleChangeKW_ID.bind(this)} />
                                         <p>Du hast den Standort <strong>{this.state.kraftwerk_name}</strong> ausgewählt, welcher die ID <strong>{this.state.kw_id}</strong> hat</p>
                                     </div>
 

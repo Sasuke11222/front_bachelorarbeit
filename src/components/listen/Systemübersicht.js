@@ -9,7 +9,6 @@ import KraftwerkeDataService from "../../services/kraftwerk.service";
 export default class Systemuebersichtsliste extends Component {
     constructor(props) {
         super(props);
-        this.retrieveSysteme = this.retrieveSysteme.bind(this);
         this.refreshList = this.refreshList.bind(this);
         this.setActiveSystem = this.setActiveSystem.bind(this);
 
@@ -28,57 +27,51 @@ export default class Systemuebersichtsliste extends Component {
 
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
+
         if (kraftwerk) {
             this.setState({
                 currentStandort: kraftwerk,
             });
         }
 
-        const fsysteme = SystemDataService.getCurrentSysteme();
+        const filteredsystem = SystemDataService.getCurrentSystem();
 
-        if (fsysteme) {
-            this.setState({
-                filteredSysteme: fsysteme,
-            });
-        }
-
-        this.retrieveSysteme();
-    }
-
-    retrieveSysteme() {
-        SystemDataService.getAll()
-            .then(response => {
-                this.setState({
-                    systeme: response.data
+        if (kraftwerk.kw_id == 7) {
+            SystemDataService.getAll()
+                .then(response => {
+                    this.setState({
+                        filteredSysteme: response.data
+                    });
+                    console.log(response.data);
+                })
+                .catch(e => {
+                    console.log(e);
                 });
-                console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
+        }else {
+            this.setState({
+                filteredSysteme: filteredsystem,
+            });}
     }
-
     refreshList() {
-        this.retrieveSysteme();
         this.setState({
             aktuellesSystem: null,
             currentIndex: -1
         });
     }
 
-    setActiveSystem(filteredSysteme, index) {
+    setActiveSystem(systeme, index) {
         this.setState({
-            aktuellesSystem: filteredSysteme,
+            aktuellesSystem: systeme,
             currentIndex: index,
         });
     }
 
-    handleView(filteredSysteme, index) {
+    handleView(systeme, index) {
 
         this.setState({
             currentIndex: index,
             viewMode: true,
-            aktuellesSystem: filteredSysteme
+            aktuellesSystem: systeme
         });
     }
 
@@ -91,7 +84,7 @@ export default class Systemuebersichtsliste extends Component {
 
 
     render() {
-        const { systeme, aktuellesSystem, currentIndex, currentStandort, filteredSysteme } = this.state;
+        const {aktuellesSystem, currentIndex, currentStandort, filteredSysteme } = this.state;
 
 
         const totalSysteme = filteredSysteme.length;
@@ -125,7 +118,7 @@ export default class Systemuebersichtsliste extends Component {
                             <div className="col-md-8">
                                 <h3 style={h3}>Systemübersicht: {currentStandort.kraftwerk_name}</h3>
                             </div>
-                            {SystemDataService.getSystembyKw_ID(parseInt(currentStandort.kw_id)) ? (
+                            {filteredSysteme ? (
                                 console.log(filteredSysteme),
                                 <>
                                     <strong>{totalSysteme}</strong> Systeme
@@ -161,7 +154,7 @@ export default class Systemuebersichtsliste extends Component {
                                                         <label>
                                                             <strong>Blöcke:</strong>
                                                         </label>{""}
-                                                        {aktuellesSystem.ksp_a === 1 ? "Block A" : null} {aktuellesSystem.ksp_b === 1 ? "Block B" : null} {aktuellesSystem.ksp_y === 1 ? "Y0" : null}
+                                                        {aktuellesSystem.ksp_a === 1 ? "Block A" : null } {aktuellesSystem.ksp_b === 1 ? "Block B" : null} {aktuellesSystem.ksp_y === 1 ? "Y0" : null}
                                                         {aktuellesSystem.box_n === 1 ? "Block N" : null} {aktuellesSystem.box_p === 1 ? "Block P" : null} {aktuellesSystem.box_q === 1 ? "Block Q" :  null} {aktuellesSystem.box_r === 1 ? "Block R" :  null} {aktuellesSystem.box_y === 1 ? "Y0" : null}
                                                         {aktuellesSystem.jae_a === 1 ? "Block A" :  null} {aktuellesSystem.jae_b === 1 ? "Block B" :  null} {aktuellesSystem.jae_c === 1 ? "Block C" :  null} {aktuellesSystem.jae_d === 1 ? "Block N" :  null} {aktuellesSystem.jae_e === 1 ? "Block E" :  null} {aktuellesSystem.jae_f === 1 ? "Block F" :  null} {aktuellesSystem.jae_y === 1 ? "Y0" :  null}
                                                         {aktuellesSystem.lip_r === 1 ? "Block R" :  null} {aktuellesSystem.lip_s === 1 ? "Block S" :  null} {aktuellesSystem.lip_y === 1 ? "Y0" :  null}
@@ -294,12 +287,6 @@ export default class Systemuebersichtsliste extends Component {
                                                     <strong>ISMS-Reduzierung:</strong>
                                                 </label>{" "}
                                                 {aktuellesSystem.isms_Reduzierung} %
-                                            </div>
-                                            <div>
-                                                <label>
-                                                    <strong>ISMS-Begrüngung:</strong>
-                                                </label>{" "}<br/>
-                                                {aktuellesSystem.isms_Begruendung}
                                             </div>
                                         </Col>
                                     </Row>

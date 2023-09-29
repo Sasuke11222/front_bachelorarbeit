@@ -11,6 +11,7 @@ import Home from "./components/home.component";
 
 import EventBus from "./common/EventBus";
 import Hauptseite from "./pages/Hauptseite";
+import UpdateKraftwerksdaten from "./components/forms/UpdateKraftwerksdaten";
 import Komponentenuebersicht from "./pages/Komponentenuebersicht";
 import Systemuebersicht from "./pages/Systemuebersicht";
 import Mitarbeiter from "./pages/Mitarbeiter";
@@ -137,6 +138,7 @@ class App extends Component {
             <Route path={"/addSystemhersteller"} element={ <AddSystemhersteller />} />
             <Route path={"/addMitarbeiter"} element={ <AddMitarbeiter />} />
             <Route path={"/kraftwerksdaten"} element={ <Kraftwerksdaten />} />
+            <Route path={"/updatekraftwerksdaten"} element={ <UpdateKraftwerksdaten />} />
           </Routes>
         </div>
 

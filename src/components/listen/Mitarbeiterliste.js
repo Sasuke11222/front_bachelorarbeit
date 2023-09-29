@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import MitarbeiterDataService from "../../services/mitarbeiter.service";
-import {Row, Container} from "react-bootstrap";
+import {Row, Container, Button} from "react-bootstrap";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
+import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
 
 //Seite für Generierung der Mitarbeiterliste
 export default class Mitarbeiterliste extends Component {
@@ -29,6 +30,20 @@ export default class Mitarbeiterliste extends Component {
         }
 
         this.retrieveMitarbeiter();
+    }
+
+    deleteMitarbeiter(mitarbeiter_id) {
+        MitarbeiterDataService.deleteMitarbeiterByID(mitarbeiter_id)
+            .then(response => {
+                // Handle success
+                console.log(response);
+                window.location.reload();
+            })
+            .catch(error => {
+                // Handle error
+                console.log(error);
+            });
+
     }
 
     retrieveMitarbeiter() {
@@ -133,6 +148,12 @@ export default class Mitarbeiterliste extends Component {
                                                 </label>{" "}
                                                 {aktuellerMitarbeiter.mail}
                                             </div>
+
+                                            <Button
+                                                onClick={this.deleteMitarbeiter}
+                                            >
+                                                <FaTrashAlt/>
+                                            </Button>
                                         </div>
                                     ) : (
                                         <div>

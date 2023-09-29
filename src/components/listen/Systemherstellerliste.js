@@ -10,7 +10,6 @@ export default class SystemherstellerList extends Component {
 
     constructor(props) {
         super(props);
-        this.retrieveHersteller = this.retrieveHersteller.bind(this);
         this.refreshList = this.refreshList.bind(this);
         this.setActiveHersteller = this.setActiveHersteller.bind(this);
 
@@ -26,63 +25,55 @@ export default class SystemherstellerList extends Component {
     }
 
     deleteSystemhersteller(systemhersteller_id) {
-        SystemherstellerDataService.delete(systemhersteller_id)
+        SystemherstellerDataService.deleteHerstellerByID(systemhersteller_id)
             .then(response => {
                 // Handle success
                 console.log(response);
+                window.location.reload();
             })
             .catch(error => {
                 // Handle error
                 console.log(error);
             });
+
     }
 
     componentDidMount() {
-        const krafwerk = KraftwerkeDataService.getCurrentKraftwerk();
+        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
-        if (krafwerk) {
+        if (kraftwerk) {
             this.setState({
-                currentStandort: krafwerk.kraftwerk_name,
+                currentStandort: kraftwerk.kraftwerk_name,
             });
         }
 
-        this.retrieveHersteller();
-    }
-
-
-    retrieveHersteller() {
-        SystemherstellerDataService.getAll()
-            .then(response => {
-                this.setState({
-                    systemhersteller_id: response.data,
-                    hersteller: response.data
-                });
-                console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
+        const hersteller = SystemherstellerDataService.getCurrentHersteller()
+        if (hersteller) {
+            this.setState({
+                hersteller: hersteller,
             });
+        }
+
+
     }
 
     refreshList() {
-        this.retrieveHersteller();
+
         this.setState({
-            systemhersteller_id: null,
             aktuellerHersteller: null,
             currentIndex: -1
         });
     }
 
-    setActiveHersteller(hersteller,systemhersteller_id, index) {
+    setActiveHersteller(hersteller, index) {
         this.setState({
-            systemhersteller_id: systemhersteller_id,
             aktuellerHersteller: hersteller,
             currentIndex: index
         });
     }
 
     render() {
-        const { hersteller, systemhersteller_id, aktuellerHersteller, currentIndex, currentStandort } = this.state;
+        const { hersteller, aktuellerHersteller, currentIndex, currentStandort } = this.state;
 
         const totalHersteller = hersteller.length;
 
@@ -116,9 +107,8 @@ export default class SystemherstellerList extends Component {
                                                         "list-group-item " +
                                                         (index === currentIndex ? "active" : "")
                                                     }
-                                                    onClick={() => this.setActiveHersteller(hersteller,systemhersteller_id, index)}
+                                                    onClick={() => this.setActiveHersteller(hersteller, index)}
                                                     key={index}
-                                                    value={systemhersteller_id}
                                                 >
                                                     {hersteller.herstellername}
                                                 </li>
@@ -137,7 +127,7 @@ export default class SystemherstellerList extends Component {
                                                 {aktuellerHersteller.herstellername}
                                             </div>
                                             <Button
-                                                onClick={() => this.deleteSystemhersteller(hersteller.systemhersteller_id)}
+                                                onClick={() => this.deleteSystemhersteller(aktuellerHersteller.id)}
                                             >
                                                 <FaTrashAlt/>
                                             </Button>

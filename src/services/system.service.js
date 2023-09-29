@@ -1,10 +1,32 @@
 import axios from "axios";
+import KraftwerkeDataService from "./kraftwerk.service";
+import KomponentenService from "./komponenten.service";
 const API_URL = 'http://localhost:8080/api/';
 
 class SystemDataService {
-    currentStandort = localStorage.getItem("kraftwerk");
+
+    constructor(props) {
+
+        this.state = {
+           currentStandort: undefined,
+                   };
+    }
+    currentStandort = KraftwerkeDataService.getCurrentKraftwerk();
+
     getAll() {
-        return axios.get(API_URL + 'systeme');
+        return axios
+            .get(API_URL + 'systeme')
+            .then(response => {
+                const systeme = response.data;
+                const  requests = systeme.map(system => {
+                    return KomponentenService.getKomponentebySystem_ID(system.system_id)
+                        .then(komponenten => {
+                            system.anzahlKomponente = komponenten.length;
+                            return system;
+                        })
+                })
+                return Promise.all(requests);
+            })
     }
 
     getSystembyKw_ID(kw_id) {
@@ -18,24 +40,15 @@ class SystemDataService {
 
     }
 
-    getCurrentSysteme() {
-        this.getSystembyKw_ID(parseInt(this.currentStandort.kw_id)).then(r =>
-        {localStorage.setItem("filtersysteme", JSON.stringify(r.data));
-            return r.data || [];
-        })
-        return JSON.parse(localStorage.getItem('filteredsysteme'));;
+    getCurrentSystem() {
+        this.getSystembyKw_ID(this.currentStandort.kw_id);
+
+        return JSON.parse(localStorage.getItem('filteredsysteme'));
     }
 
     get(system_id) {
         return axios
             .get(API_URL + 'systeme/', system_id)
-            .then(response => {
-                if (response.data.accessToken) {
-                    localStorage.setItem("systeme", JSON.stringify(response.data));
-                }
-
-                return response.data;
-            });
     }
 
     create(data) {
@@ -49,7 +62,6 @@ class SystemDataService {
     delete(system_id) {
         return axios.delete(API_URL + 'systeme/', system_id);
     }
-
 }
 
 export default new SystemDataService();

@@ -3,6 +3,7 @@ import {Button, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Komponentenbericht from "../components/tables/Komponentenbericht";
 import KraftwerkeDataService from "../services/kraftwerk.service";
+import {withRouter} from "../common/with-router";
 
 
 
@@ -17,13 +18,14 @@ class Komponentenuebersicht extends Component {
     }
 
     componentDidMount() {
-        const krafwerk = KraftwerkeDataService.getCurrentKraftwerk();
+        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
-        if (krafwerk) {
+        if (kraftwerk) {
             this.setState({
-                currentStandort: krafwerk.kraftwerk_name,
+                currentStandort: kraftwerk.kraftwerk_name,
             });
         }
+
     }
     render() {
         const hauptbox = {
@@ -129,4 +131,4 @@ class Komponentenuebersicht extends Component {
     }
 }
 
-export default Komponentenuebersicht
+export default withRouter(Komponentenuebersicht);

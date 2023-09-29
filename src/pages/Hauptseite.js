@@ -13,11 +13,11 @@ class Hauptseite extends Component {
 }
 
     componentDidMount() {
-        const krafwerk = KraftwerkeDataService.getCurrentKraftwerk();
+        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
-        if (krafwerk) {
+        if (kraftwerk) {
             this.setState({
-                currentStandort: krafwerk.kraftwerk_name,
+                currentStandort: kraftwerk,
             });
         }
     }
@@ -128,7 +128,7 @@ class Hauptseite extends Component {
                                 <>
                                     <div className="navbar-nav ml-auto">
                                         <div>
-                                            <h3 style={h3}>Standort {currentStandort}</h3>
+                                            <h3 style={h3}>Standort {currentStandort.kraftwerk_name}</h3>
                                         </div>
                                         <div>
                                             <Container style={container2}>
@@ -137,7 +137,8 @@ class Hauptseite extends Component {
                                                     <Link
                                                         style={link}
                                                         className="navbar-link"
-                                                        to={"/systemuebersicht"}>
+                                                        to={"/systemuebersicht"}
+                                                        >
                                                         Systeme
                                                     </Link>
                                                 </Button>{' '}
@@ -145,7 +146,8 @@ class Hauptseite extends Component {
                                                     <Link
                                                         style={link}
                                                         className="navbar-link"
-                                                        to={"/komponentenuebersicht"}>
+                                                        to={"/komponentenuebersicht"}
+                                                        onClick={this.forceUpdate}>
                                                         Komponenten
                                                     </Link>
                                                 </Button>{' '}

@@ -1,14 +1,30 @@
 import axios from "axios";
+import systemhersteller from "../pages/Systemhersteller";
 const API_URL = 'http://localhost:8080/api/';
 
 class SystemherstellerDataService {
     getAll() {
-        return axios.get(API_URL + 'systemhersteller');
+        return axios
+            .get(API_URL + 'systemhersteller')
+            .then(r => {
+                localStorage.setItem('allhersteller', JSON.stringify(r.data));
+                return r.data || [];
+            });
     }
 
-    get(systemhersteller_id) {
+    deleteHerstellerByID(id) {
+        console.log(API_URL + 'systemhersteller/' + id )
         return axios
-            .get(API_URL + 'systemhersteller/', systemhersteller_id);
+            .delete(API_URL + 'systemhersteller/' + id );
+    }
+
+    get(id) {
+        console.log(API_URL + 'systemhersteller/' + id )
+        return axios
+            .get(API_URL + 'systemhersteller/' + id ).then(r => {
+                localStorage.setItem('hersteller', JSON.stringify(r.data));
+                return r.data || [];
+            });
     }
 
     create(herstellername) {
@@ -21,12 +37,10 @@ class SystemherstellerDataService {
         return axios.put(API_URL + 'systemhersteller/', systemhersteller_id, data);
     }
 
-    delete(systemhersteller_id) {
-        return axios.delete(API_URL + 'systemhersteller/', systemhersteller_id);
-    }
 
-    getCurrentSystem() {
-        return JSON.parse(localStorage.getItem('user'));;
+    getCurrentHersteller() {
+        this.getAll();
+        return JSON.parse(localStorage.getItem('allhersteller'));;
     }
 
 }

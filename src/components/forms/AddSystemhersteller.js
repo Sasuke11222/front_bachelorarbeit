@@ -86,7 +86,7 @@ export default class AddSystemhersteller extends Component {
                     <div>
                         <h4>Erfolgreich {this.state.herstellername} hinzugefügt!</h4>
                         <Button>
-                            <Link style={link} to={"/systemhersteller"}>
+                            <Link to={"/systemhersteller"}  onClick={this.forceUpdate} style={link}>
                                 Zurück
                             </Link>
                         </Button>

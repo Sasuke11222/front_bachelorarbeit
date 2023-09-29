@@ -7,7 +7,7 @@ import KraftwerkDataService from "../../services/kraftwerk.service";
 import Select from "react-select";
 import axios from "axios";
 
-class Kraftwerk extends Component {
+class KraftwerkTest extends Component {
     constructor(props) {
         super(props);
         this.handleKraftwerk = this.handleKraftwerk.bind(this);
@@ -17,32 +17,44 @@ class Kraftwerk extends Component {
         this.state = {
             kw_id: null,
             kraftwerk_name: "",
+            kraftwerksleiter: "",
+            zoneninstanzbesitzer: "",
+            systemkoordinator: "",
             loading: false,
             message: ""
         };
     }
 
-    async getOptions(){
+    async getOptions() {
         const res = await axios.get('http://localhost:8080/api/kraftwerke')
 
         const data = res.data
 
         const options = data.map(d => ({
-            kw_id : d.kw_id,
-            kraftwerk_name : d.kraftwerk_name,
+            kw_id: d.kw_id,
+            kraftwerk_name: d.kraftwerk_name,
+            kraftwerksleiter: d.kraftwerksleiter,
+            zoneninstanzbesitzer: d.zoneninstanzbesitzer,
+            systemkoordinator: d.systemkoordinator
 
         }))
-        this.setState({kraftwerk: options})
+        this.setState({ kraftwerk: options })
 
         console.log(options);
 
     }
 
-    handleChange(e){
-        this.setState({kw_id:e.kw_id, kraftwerk_name:e.kraftwerk_name})
+    handleChange(e) {
+        this.setState({
+            kw_id: e.kw_id,
+            kraftwerk_name: e.kraftwerk_name,
+            kraftwerksleiter: e.kraftwerksleiter,
+            zoneninstanzbesitzer: e.zoneninstanzbesitzer,
+            systemkoordinator: e.systemkoordinator
+        })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getOptions()
     }
 
@@ -89,6 +101,12 @@ class Kraftwerk extends Component {
     }
 
     render() {
+        const text ={
+            color: '#000',
+            textColor: '#000',
+            textDecoration: "none"
+        }
+
         return (
             <div className="col-md-12">
                 <div className="container">
@@ -106,14 +124,7 @@ class Kraftwerk extends Component {
                                 placeholder={"Standorte"}
                                 options={this.state.kraftwerk}
                                 value={this.state.kraftwerk_name}
-                                theme={(theme) => ({
-                                    ...theme,
-                                    borderRadius: 0,
-                                    colors: {
-                                        ...theme.colors,
-                                        text: 'black',
-                                    },
-                                })}
+                                styles={text}
                                 onChange={this.handleChange.bind(this)}
                                 disabled={this.state.loading}>{this.state.loading && (
                                 <span className="spinner-border spinner-border-sm"></span>
@@ -140,6 +151,7 @@ class Kraftwerk extends Component {
             </div>
         );
     }
+
 }
 
-export default withRouter(Kraftwerk);
+export default withRouter(KraftwerkTest);
