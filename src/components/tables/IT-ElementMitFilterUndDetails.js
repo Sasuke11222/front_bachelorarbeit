@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import {BsGearFill} from "@react-icons/all-files/bs/BsGearFill";
 import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
-import SystemherstellerDataService from "../../services/systemhersteller.service";
+
 export default class ITElementMitFilterUndDetails extends Component {
     constructor(props) {
         super(props);
@@ -215,7 +215,7 @@ export default class ITElementMitFilterUndDetails extends Component {
 
         const filteredkomponenten = KomponentDataService.getCurrentKomponente();
 
-        if (kraftwerk.kw_id == 7) {
+        if (kraftwerk.kw_id === 7) {
             KomponentDataService.getAll()
                 .then(response => {
                     this.setState({
@@ -311,11 +311,13 @@ export default class ITElementMitFilterUndDetails extends Component {
     }
 
     render() {
-        const { kksFilter, systemFilter,systemeinheitFilter,betriebssystemFilter, filteredKomopnenten } = this.state;
+        const { kksFilter, systemFilter,systemeinheitFilter,betriebssystemFilter, filteredKomopnenten, herstellerFilter, modellFilter } = this.state;
 
         const filteredData = filteredKomopnenten.filter((dt) => dt.kks.toLowerCase().includes(kksFilter.toLowerCase())
+            //&& dt.modell.toLowerCase().includes(modellFilter.toLowerCase())
             && dt.systemeinheit_id.systemeinheit_name.toLowerCase().includes(systemeinheitFilter.toLowerCase())
             && dt.betriebssystem_id.betriebssystem_name.toLowerCase().includes(betriebssystemFilter.toLowerCase())
+            && dt.systemhersteller_id.herstellername.toLowerCase().includes(herstellerFilter.toLowerCase())
             && dt.system_id.system_name.toLowerCase().includes(systemFilter.toLowerCase()));
 
         const totalIT_Elemente = filteredData.length;
@@ -400,7 +402,11 @@ export default class ITElementMitFilterUndDetails extends Component {
                                 />
                             </th>
                             <th>Hersteller
-                                <br />
+                                <br/>
+                                <input
+                                    value={herstellerFilter}
+                                    onChange={this.handleSystemherstellerFilterChange}
+                                />
                             </th>
                             <th>Modell
                             </th>
@@ -415,7 +421,7 @@ export default class ITElementMitFilterUndDetails extends Component {
                                 <td>{item.systemeinheit_id.systemeinheit_name}</td>
                                 <td>{item.system_id.system_name}</td>
                                 <td>{item.betriebssystem_id.betriebssystem_name}</td>
-                                <td>{item.systemhersteller_id}</td>
+                                <td>{item.systemhersteller_id.herstellername}</td>
                                 <td>{item.modell}</td>
                                 <td>
                                     <Button
@@ -584,7 +590,7 @@ export default class ITElementMitFilterUndDetails extends Component {
                                                     </FloatingLabel>
                                                 </Form.Group>
                                                 <Form.Group className="mb-3" controlId="formGroupEmail">
-                                                    <Form.Label>Systemhersteller: {this.state.aktuellesIT_Element.systemhersteller_id}</Form.Label>
+                                                    <Form.Label>Systemhersteller: {this.state.aktuellesIT_Element.systemhersteller_id.herstellername}</Form.Label>
                                                     <FloatingLabel controlId="floatingSelect" label="Hersteller" style={floatinlabel}>
                                                         <Form.Select>
                                                             <option value="1">Hersteller 1</option>
