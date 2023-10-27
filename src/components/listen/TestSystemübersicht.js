@@ -1,141 +1,111 @@
-import React, {Component} from "react";
+import React, { useEffect, useState } from "react";
 import SystemDataService from "../../services/system.service";
 import {Row, Container, Button} from "react-bootstrap";
-
 import Col from "react-bootstrap/Col";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
 
 //Seite für Generierung der Systemübersicht
-export default class Systemuebersichtsliste extends Component {
-    constructor(props) {
-        super(props);
-        this.refreshList = this.refreshList.bind(this);
-        this.setActiveSystem = this.setActiveSystem.bind(this);
+const Systemuebersichtsliste = () => {
+    const [systeme, setSysteme] = useState([]);
+    const [aktuellesSystem, setAktuellesSystem] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(-1);
+    const [showPopup, setShowPopup] = useState(false);
+    const [currentStandort, setCurrentStandort] = useState(undefined);
+    const [filteredSysteme, setFilteredSysteme] = useState([]);
 
-        this.state = {
-            systeme: [], //erstellt Array mit allen Systemen
-            aktuellesSystem: null, //setzt aktuelles System auf Null, da man erst auswählen muss
-            currentIndex: -1,
-            showPopup: false,
-            currentStandort: undefined,
-            filteredSysteme: [] //erstellt Array für gefilterte Systeme nach kw_id
-        };
-    }
-
-    componentDidMount() {
-
-
-        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
-
+    useEffect(() => {
+        const kraftwerk = KraftwerkeDataService.selectedKraftwerk();
 
         if (kraftwerk) {
-            this.setState({
-                currentStandort: kraftwerk,
-            });
+            setCurrentStandort(kraftwerk);
         }
 
         const filteredsystem = SystemDataService.getCurrentSystem();
 
-        if (kraftwerk.kw_id === 7) {
+        if (kraftwerk.kw_id ==13) {
             SystemDataService.getAll()
                 .then(response => {
-                    this.setState({
-                        filteredSysteme: response.data
-                    });
+                    setFilteredSysteme(response.data);
                     console.log(response.data);
                 })
                 .catch(e => {
                     console.log(e);
                 });
-        }else {
-            this.setState({
-                filteredSysteme: filteredsystem,
-            });}
-    }
-    refreshList() {
-        this.setState({
-            aktuellesSystem: null,
-            currentIndex: -1
-        });
-    }
+        } else {
+            setFilteredSysteme(filteredsystem);
+        }
+    }, []);
 
-    setActiveSystem(systeme, index) {
-        this.setState({
-            aktuellesSystem: systeme,
-            currentIndex: index,
-        });
-    }
+    const refreshList = () => {
+        setAktuellesSystem(null);
+        setCurrentIndex(-1);
+    };
 
-    handleView(systeme, index) {
+    const setActiveSystem = (systeme, index) => {
+        setAktuellesSystem(systeme);
+        setCurrentIndex(index);
+    };
 
-        this.setState({
-            currentIndex: index,
-            viewMode: true,
-            aktuellesSystem: systeme
-        });
-    }
+    const handleView = (systeme, index) => {
+        setCurrentIndex(index);
+        setAktuellesSystem(systeme);
+        setShowPopup(true);
+    };
 
-    handleCancel(e) {
-        this.setState({
-            viewMode: false,
-        });
+    const handleCancel = (e) => {
+        setShowPopup(false);
         e.preventDefault();
-    }
+    };
 
+    const selectedStandort = localStorage.getItem("kraftwerk_name");
+    const KWID = localStorage.getItem("kw_id");
 
-    render() {
-        const {aktuellesSystem, currentIndex, currentStandort, filteredSysteme } = this.state;
+    const totalSysteme = filteredSysteme.length;
 
-        const totalSysteme = filteredSysteme.length;
+    if (totalSysteme === 0) return null;
 
+    const h3 = {
+        marginTop: "3px",
+    };
 
-        if (totalSysteme === 0) return null;
+    const moral = {
+        color: "#000",
+    };
 
-        const h3 = {
-            marginTop: "3px",
-        }
+    const container = {
+        maxHeight: "75%",
+    };
 
-        const moral= {
-            color: "#000"
-        }
+    const button2 = {
+        width:"100px",
+        background: "#0067ac",
+        marginTop: "5px",
+    };
 
-        const container = {
-            maxHeight: "75%"
-        }
-
-        const button2 = {
-            width:"100px",
-            background: "#0067ac",
-            marginTop: "5px"
-        }
-
-        return (
-            <div>
-                <Container style={container}>
-                    {currentStandort ? (
-                        <>
-                            <div className="col-md-8">
-                                <h3 style={h3}>Systemübersicht: {currentStandort.kraftwerk_name}</h3>
-                            </div>
-                            {filteredSysteme ? (
-                                console.log(filteredSysteme),
+    return (
+        <div>
+            <Container style={container}>
+                {KWID ? (
+                    <>
+                        <div className="col-md-8">
+                            <h3 style={h3}>Systemübersicht: {selectedStandort}</h3>
+                        </div>
+                        {filteredSysteme ? (
+                            console.log(filteredSysteme),
                                 <>
+                                    <strong>{totalSysteme}</strong> Systeme
                                     <Row>
                                         <div className="col-md-6">
                                             <ul className="list-group">
-                                                {filteredSysteme &&
-                                                    filteredSysteme.map((filteredSysteme, index) => (
-                                                        <li
-                                                            className={
-                                                                "list-group-item " +
-                                                                (index === currentIndex ? "active" : "")
-                                                            }
-                                                            onClick={() => this.setActiveSystem(filteredSysteme, index)}
-                                                            key={index}
-                                                        >
-                                                            {filteredSysteme.system_name}
-                                                        </li>
-                                                    ))}
+                                                {filteredSysteme.map((filteredSystem, index) => (
+                                                    <li
+                                                        className={"list-group-item " + (index === currentIndex ? "active" : "")}
+                                                        onClick={() => setActiveSystem(filteredSystem, index)}
+                                                        key={index}
+                                                    >
+                                                        {filteredSystem.system_name}
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                         <div className="col-md-6">
@@ -203,7 +173,7 @@ export default class Systemuebersichtsliste extends Component {
                                                         <label>
                                                             <strong>Systemverantwortlicher:</strong>
                                                         </label>{" "}
-                                                        {aktuellesSystem.mitarbeiter_id.vorname + " " + aktuellesSystem.mitarbeiter_id.nachname}
+                                                        {aktuellesSystem.mitarbeiter_id.vorname + " " + aktuellesSystem.mitarbeiter_id.nachname === null ? "keiner" : aktuellesSystem.mitarbeiter_id.vorname + " " + aktuellesSystem.mitarbeiter_id.nachname}
                                                     </div>
                                                     <div>
                                                         <strong htmlFor="bürozugang">Bürozugang: </strong>
@@ -247,57 +217,53 @@ export default class Systemuebersichtsliste extends Component {
                                         </div>
                                     </Row>
                                 </>
-                            ):(
-                                <div>
-                                    <h1>Test</h1>
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <div>Hallo</div>
-                    )}
-                    <div>
-                        {this.state.viewMode && (
-                            <div
-                                className={
-                                    "modal " + (this.state.viewMode ? "displayBlock" : "displayNone")
-                                }
-                            >
-                                <div className="modal-content" style={moral}>
-                                    <Row>
-                                        <Col md={16} className="mb-2">
-                                            <div>
-                                                <label>
-                                                    <strong>ISMS Relevant:</strong>
-                                                </label>{" "}
-
-                                                {aktuellesSystem.isms_Relevant === null ? "nein" : aktuellesSystem.isms_Relevant}
-                                            </div>
-                                            <div>
-                                                <label>
-                                                    <strong>ISMS-Auswirkung:</strong>
-                                                </label>{" "}
-
-                                                {aktuellesSystem.isms_Auswirkung}
-                                            </div>
-                                            <div>
-                                                <label>
-                                                    <strong>ISMS-Reduzierung:</strong>
-                                                </label>{" "}
-                                                {aktuellesSystem.isms_Reduzierung} %
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Button onClick={(e) => this.handleCancel(e)}>Schließen</Button>
-                                </div>
+                        ) : (
+                            <div>
+                                <h1>Test</h1>
                             </div>
                         )}
+                    </>
+                ) : (
+                    <div>Hallo</div>
+                )}
+
+                {showPopup && (
+                    <div className={"modal " + (showPopup ? "displayBlock" : "displayNone")}>
+                        <div className="modal-content" style={moral}>
+                            <Row>
+                                <Col md={16} className="mb-2">
+                                    <div>
+                                        <label>
+                                            <strong>ISMS Relevant:</strong>
+                                        </label>{" "}
+
+                                        {aktuellesSystem.isms_Relevant === null ? "nein" : aktuellesSystem.isms_Relevant}
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <strong>ISMS-Auswirkung:</strong>
+                                        </label>{" "}
+
+                                        {aktuellesSystem.isms_Auswirkung}
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <strong>ISMS-Reduzierung:</strong>
+                                        </label>{" "}
+                                        {aktuellesSystem.isms_Reduzierung} %
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Button onClick={(e) => handleCancel(e)}>Schließen</Button>
+                        </div>
                     </div>
-                    <h4>
-                        <strong>{totalSysteme}</strong> Systeme
-                    </h4>
-                </Container>
-            </div>
-        );
-    }
-}
+                )}
+                <h4>
+                    <strong>{totalSysteme}</strong> Systeme
+                </h4>
+            </Container>
+        </div>
+    );
+};
+
+export default Systemuebersichtsliste;

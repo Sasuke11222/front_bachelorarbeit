@@ -1,5 +1,4 @@
 import axios from "axios";
-import systemhersteller from "../pages/Systemhersteller";
 const API_URL = 'http://localhost:8080/api/';
 
 class SystemherstellerDataService {

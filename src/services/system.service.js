@@ -11,6 +11,7 @@ class SystemDataService {
            currentStandort: undefined,
                    };
     }
+    //currentStandort = parseInt(localStorage.getItem("kw_id"));
     currentStandort = KraftwerkeDataService.getCurrentKraftwerk();
 
     getAll() {
@@ -32,12 +33,11 @@ class SystemDataService {
     getSystembyKw_ID(kw_id) {
         console.log(API_URL + 'systeme/kraftwerk/' + kw_id )
         return axios
-            .get(API_URL + 'systeme/kraftwerk/' + kw_id )
+            .get(API_URL + 'systeme/kraftwerk/' + parseInt(kw_id))
             .then(response => {
                 localStorage.setItem("filteredsysteme", JSON.stringify(response.data));
                 return response.data || [];
             });
-
     }
 
     getCurrentSystem() {
@@ -47,8 +47,12 @@ class SystemDataService {
     }
 
     get(system_id) {
+        console.log(API_URL + 'systeme/' + system_id )
         return axios
-            .get(API_URL + 'systeme/', system_id)
+            .get(API_URL + 'systeme/' + system_id ).then(r => {
+                localStorage.setItem('SystemFürKomponente', JSON.stringify(r.data));
+                return r.data || [];
+            });
     }
 
     create(data) {

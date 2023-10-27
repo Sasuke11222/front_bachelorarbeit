@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "../../styles.css";
+import "../../App.css";
 import {BsInfoCircle} from "@react-icons/all-files/bs/BsInfoCircle";
 import KomponentDataService from "../../services/komponenten.service";
 import {Button, FloatingLabel, Form, Tab, Table, Tabs} from "react-bootstrap";
@@ -9,6 +9,7 @@ import Col from "react-bootstrap/Col";
 import {BsGearFill} from "@react-icons/all-files/bs/BsGearFill";
 import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
+import SystemTest2 from "../SelectMenu/SystemTest2";
 
 export default class ITElementMitFilterUndDetails extends Component {
     constructor(props) {
@@ -567,15 +568,7 @@ export default class ITElementMitFilterUndDetails extends Component {
                                                 </Form.Group>
                                                 <Form.Group className="mb-3" controlId="formGroupEmail">
                                                     <Form.Label>System: {this.state.aktuellesIT_Element.system_id.system_name}</Form.Label>
-                                                    <FloatingLabel controlId="floatingSelect" label="System" style={floatinlabel}>
-                                                        <Form.Select>
-                                                            <option value="1">System 1</option>
-                                                            <option value="2">System 2</option>
-                                                            <option value="3">System 3</option>
-                                                            <option value="4">System 4</option>
-                                                            <option value="5">System 5</option>
-                                                        </Form.Select>
-                                                    </FloatingLabel>
+                                                    <SystemTest2 />
                                                 </Form.Group>
                                                 <Form.Group className="mb-3" controlId="formGroupEmail">
                                                     <Form.Label>Betriebssystem: {this.state.aktuellesIT_Element.betriebssystem_id.betriebssystem_name}</Form.Label>

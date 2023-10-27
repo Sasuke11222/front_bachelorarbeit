@@ -12,6 +12,12 @@ class Hauptseite extends Component {
     };
 }
 
+/*
+    componentWillUnmount() {
+        localStorage.clear(); // Lokalen Speicher löschen
+    }
+ */
+
     componentDidMount() {
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 

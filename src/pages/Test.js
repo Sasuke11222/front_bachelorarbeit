@@ -1,13 +1,13 @@
 import React from "react";
-
-import UpdateKraftwerksdatenTest from "../components/forms/UpdateKraftwerksdatenTest";
+import SelcetTest from "../components/SelectMenu/SelcetTest";
+import AddKraftwerk from "../components/forms/AddKraftwerk";
 
 function Test() {
 
     return (
         <div style={{marginTop: "100px"}}>
             <h3>Test</h3>
-            <UpdateKraftwerksdatenTest/>
+            <AddKraftwerk/>
         </div>
     );
 }

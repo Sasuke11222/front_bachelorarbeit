@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
+import {withRouter} from "../../common/with-router";
 
 
 
@@ -15,6 +16,19 @@ class Kraftwerksdaten extends Component {
         };
     }
 
+    /*
+    componentDidMount() { this.getKraftwerk(); }
+    async getKraftwerk() {
+        const response = await KraftwerkeDataService.getCurrentKraftwerk();
+        if (response.status === 200) {
+            const kraftwerk = response.data;
+            // Prüfen, ob sich die Werte geändert haben
+            if (JSON.stringify(this.state.currentStandort) !== JSON.stringify(kraftwerk)) {
+                this.setState({ currentStandort: kraftwerk, });
+            }
+        }
+    }
+     */
     componentDidMount() {
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
@@ -25,6 +39,7 @@ class Kraftwerksdaten extends Component {
         }
 
     }
+
     render() {
         const hauptbox = {
             maxWidth: "200%",
@@ -85,6 +100,7 @@ class Kraftwerksdaten extends Component {
                                             <Form.Group className="mb-3" controlId="formGroupEmail">
                                                 <label htmlFor="kraftwerksleiter">Kraftwerksleiter:</label>
                                                 <input
+                                                    disabled={true}
                                                     type="text"
                                                     className="form-control"
                                                     id="kraftwerksleiter"
@@ -94,6 +110,7 @@ class Kraftwerksdaten extends Component {
                                             <Form.Group className="mb-3" controlId="formGroupEmail">
                                                 <label htmlFor="zoneninstanzbesitzer">Zoneninstanzbesitzer:</label>
                                                 <input
+                                                    disabled={true}
                                                     type="text"
                                                     className="form-control"
                                                     id="zoneninstanzbesitzer"
@@ -103,6 +120,7 @@ class Kraftwerksdaten extends Component {
                                             <Form.Group className="mb-3" controlId="formGroupEmail">
                                                 <label htmlFor="systemkoordinator">Systemkoordinator:</label>
                                                 <input
+                                                    disabled={true}
                                                     type="text"
                                                     className="form-control"
                                                     id="systemkoordinator"
@@ -143,4 +161,4 @@ class Kraftwerksdaten extends Component {
     }
 }
 
-export default Kraftwerksdaten
+export default withRouter(Kraftwerksdaten)

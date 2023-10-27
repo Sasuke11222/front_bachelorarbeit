@@ -1,10 +1,10 @@
 import React from "react";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import Systemliste from "../components/listen/Systemliste";
 import Systemuebersichtsliste from "../components/listen/Systemübersicht";
 
 class Systemuebersicht extends React.Component {
+
     render() {
         const hauptbox = {
             maxHeight: "80%",

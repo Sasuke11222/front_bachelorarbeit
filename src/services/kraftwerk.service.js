@@ -1,4 +1,3 @@
-
 import axios from "axios";
 const API_URL = 'http://localhost:8080/api/';
 
@@ -32,28 +31,47 @@ class KraftwerkeDataService {
             });
     }
 
-    create(data) {
-        return axios.post(API_URL + 'kraftwerke', data);
-    }
-
-    update(kw_id, data) {
-        return axios.put(API_URL + 'kraftwerke/${kw_id}', data);
-    }
-
-    updateKraftwerksdaten(kw_id,
-                          kraftwerksleiter,
-                          systemkoordinator,
-                          zoneninstanzbesitzer
-                          ){
+    create(kraftwerk_name,
+           kraftwerksleiter,
+           systemkoordinator,
+           zoneninstanzbesitzer) {
         return axios
             .post(API_URL + "kraftwerke", {
+                kraftwerk_name,
+                kraftwerksleiter,
+                systemkoordinator,
+                zoneninstanzbesitzer
+            })
+    }
+
+    updateKraftwerksdaten(
+        kw_id,
+        kraftwerk_name,
+        kraftwerksleiter,
+        systemkoordinator,
+        zoneninstanzbesitzer
+    ){
+        return axios
+            .put(API_URL + "kraftwerke/" + kw_id, { // Verwendung von put statt post
+                kw_id,
+                kraftwerk_name,
                 kraftwerksleiter,
                 systemkoordinator,
                 zoneninstanzbesitzer
             })
             .then(response => {
-                localStorage.setItem("kraftwerksdaten", JSON.stringify(response.data));
-                return response.data || [];
+                const kraftwerk = {
+                    kw_id,
+                    kraftwerk_name,
+                    kraftwerksleiter,
+                    systemkoordinator,
+                    zoneninstanzbesitzer
+                };
+                console.log("Daten erfolgreich aktualisiert:", JSON.stringify(kraftwerk));
+                localStorage.removeItem("kraftwerk");
+                localStorage.setItem("kraftwerk", JSON.stringify(kraftwerk));
+                //localStorage.setItem("kraftwerksdaten", JSON.stringify(kraftwerk));
+                return kraftwerk || [];
             });
     }
 
@@ -62,7 +80,11 @@ class KraftwerkeDataService {
     }
 
     getCurrentKraftwerk() {
-        return JSON.parse(localStorage.getItem('kraftwerk'));;
+        return JSON.parse(localStorage.getItem('kraftwerk'));
+    }
+
+    selectedKraftwerk(){
+        return localStorage.getItem("standortinfos");
     }
 
     getCurrentKraftwerkforMitarbeiter() {

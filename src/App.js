@@ -18,10 +18,13 @@ import Mitarbeiter from "./pages/Mitarbeiter";
 import Systemhersteller from "./pages/Systemhersteller";
 import AddSystemhersteller from "./components/forms/AddSystemhersteller";
 import Test from "./pages/Test";
+import Test2 from "./pages/Test2"
 import Kraftwerksdaten from "./pages/Kraftwerksdaten";
 import AddMitarbeiter from "./components/forms/AddMitarbeiter";
 import AddKomponente from "./components/forms/AddKomponente";
 import AddKomponente2 from "./components/forms/AddKomponente2";
+import TestSystemübersicht from "./components/listen/TestSystemübersicht";
+import KraftwerkeDataService from "./services/kraftwerk.service";
 
 
 class App extends Component {
@@ -31,6 +34,7 @@ class App extends Component {
 
     this.state = {
       currentUser: undefined,
+        currentStandort:"",
     };
   }
 
@@ -126,6 +130,8 @@ class App extends Component {
             <Route path="/user" element={<Home />} />
             <Route path="/hauptseite" element={<Hauptseite />} />
             <Route path="/test" element={<Test />} />
+              <Route path="/test2" element={<Test2 />} />
+              <Route path="/systemtest" element={<TestSystemübersicht />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

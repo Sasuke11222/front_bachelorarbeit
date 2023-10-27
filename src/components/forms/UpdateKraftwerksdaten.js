@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
+import {withRouter} from "../../common/with-router";
 
 class UpdateKraftwerksdaten extends Component {
 
@@ -13,6 +14,8 @@ class UpdateKraftwerksdaten extends Component {
 
         this.state = {
             currentStandort: undefined,
+            kw_id:"",
+            kraftwerk_name:"",
             kraftwerksleiter: "",
             zoneninstanzbesitzer: "",
             systemkoordinator: ""
@@ -55,30 +58,29 @@ class UpdateKraftwerksdaten extends Component {
         this.setState({[id]: value});
     }
 
-    handleSubmit = () => {
+    handleSubmit = (key, value) => {
         const { currentStandort, kraftwerksleiter, zoneninstanzbesitzer, systemkoordinator } = this.state;
 
-    // Call API to save changes in Spring Boot
-        KraftwerkeDataService.updateKraftwerksdaten(currentStandort.kw_id,
-            kraftwerksleiter,
-            zoneninstanzbesitzer,
+        // Call API to save changes in Spring Boot
+        KraftwerkeDataService.updateKraftwerksdaten(currentStandort.kw_id, currentStandort.kraftwerk_name,
+            kraftwerksleiter ,
+            zoneninstanzbesitzer ,
             systemkoordinator
         )
             .then(response => {
-                console.log(response.data);
                 // Zeigen Sie eine Erfolgsmeldung an und leiten Sie zurück zum Ausgangsformular
                 alert("Änderungen erfolgreich gespeichert!");
-                this.props.history.push("/ausgangsformular");
+                localStorage.removeItem("kraftwerk");
+                localStorage.setItem("kraftwerk", JSON.stringify(currentStandort));
+                this.props.router.navigate("/kraftwerksdaten"); // Hier erfolgt die Weiterleitung zur Kraftwerksdatenseite
+                window.location.reload();
             })
             .catch(error => {
                 console.log(error);
-                    // Zeigen Sie eine Fehlermeldung an, wenn etwas schiefgelaufen ist
+                // Zeigen Sie eine Fehlermeldung an, wenn etwas schiefgelaufen ist
                 alert("Fehler beim Speichern der Änderungen.");
-                });
-
-
-                    // Redirect to the previous page
-                    }
+            });
+    }
 
                     render() {
                         const hauptbox = {
@@ -101,7 +103,11 @@ class UpdateKraftwerksdaten extends Component {
 
                         const link ={
                         color: '#FFF',
-                        textDecoration: "none"
+                        textDecoration: "none",
+                            width:"300px",
+                            background: "#0067ac",
+                            marginTop: "10px",
+                            marginLeft: "5%"
                     };
 
                         const button2 = {
@@ -111,88 +117,73 @@ class UpdateKraftwerksdaten extends Component {
                         marginLeft: "50%"
                     };
 
-                        const button3 = {
-                        width:"300px",
-                        background: "#0067ac",
-                        marginTop: "10px",
-                        marginLeft: "5%"
-                    };
-
-                        const {currentStandort, kraftwerksleiter, zoneninstanzbesitzer, systemkoordinator} = this.state;
+                        const {currentStandort} = this.state;
 
                         return (
                         <>
-                        <div>
-                        <Container style={container1}>
-                        <Row>
-                        <Col style={hauptbox}>
-                    {currentStandort ? (
-                        <>
-                        <div>
-                        <h3 style={h3}>Kraftwerksdaten {currentStandort.kraftwerk_name}</h3>
-                        </div>
-                        <Form onSubmit={this.handleSubmit}>
-                        <Form.Group className="mb-3" controlId="kraftwerksleiter">
-                        <label htmlFor="kraftwerksleiter">Kraftwerksleiter:</label>
-                        <input
-                        type="text"
-                        className="form-control"
-                        name="nachname"
-                        value={this.state.kraftwerksleiter}
-                        onChange={this.onChangeKraftwerksleiter}
-                        id="kraftwerksleiter"
-                        />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="zoneninstanzbesitzer">
-                        <label htmlFor="zoneninstanzbesitzer">Zoneninstanzbesitzer:</label>
-                        <input
-                        type="text"
-                        className="form-control"
-                        id="zoneninstanzbesitzer"
-                        value={this.state.zoneninstanzbesitzer}
-                        onChange={this.onChangeZoneninstanzbesitzer}
-                        />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="systemkoordinator">
-                        <label htmlFor="systemkoordinator">Systemkoordinator:</label>
-                        <input
-                        type="text"
-                        className="form-control"
-                        id="systemkoordinator"
-                        value={this.state.systemkoordinator}
-                        onChange={this.onChangeSystemkoordinator}
-                        />
-                        </Form.Group>
-                        </Form>
-                        </>
-                        ) : (
-                        <div>Hallo</div>
-                        )}
-                        </Col>
-                        <Container>
-                        <ButtonGroup>
-                        <Button style={button2} type="submit" onClick={this.handleSubmit}>
-                        <Link
-                        style={link}>
-                        Speichern
-                        </Link>
-                        </Button>{' '}
-                        <Button style={button3}>
-                        <Link
-                        style={link}
-                        className="navbar-link"
-                        to={"/kraftwerksdaten"}>
-                        Abbruch
-                        </Link>
-                        </Button>{' '}
-                        </ButtonGroup>
-                        </Container>
-                        </Row>
-                        </Container>
-                        </div>
+                            <div>
+                                <Container style={container1}>
+                                    <Row>
+                                        <Col style={hauptbox}>
+                                            {currentStandort ? (
+                                                <>
+                                                    <div>
+                                                        <h3 style={h3}>Kraftwerksdaten {currentStandort.kraftwerk_name}</h3>
+                                                    </div>
+                                                    <Form onSubmit={this.handleSubmit}>
+                                                        <Form.Group className="mb-3" controlId="kraftwerksleiter">
+                                                            <label htmlFor="kraftwerksleiter">Kraftwerksleiter:</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                name="nachname"
+                                                                value={this.state.kraftwerksleiter}
+                                                                onChange={this.onChangeKraftwerksleiter}
+                                                                id="kraftwerksleiter"
+                                                            />
+                                                        </Form.Group>
+                                                        <Form.Group className="mb-3" controlId="zoneninstanzbesitzer">
+                                                            <label htmlFor="zoneninstanzbesitzer">Zoneninstanzbesitzer:</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="zoneninstanzbesitzer"
+                                                                value={this.state.zoneninstanzbesitzer}
+                                                                onChange={this.onChangeZoneninstanzbesitzer}
+                                                            />
+                                                        </Form.Group>
+                                                        <Form.Group className="mb-3" controlId="systemkoordinator">
+                                                            <label htmlFor="systemkoordinator">Systemkoordinator:</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="systemkoordinator"
+                                                                value={this.state.systemkoordinator}
+                                                                onChange={this.onChangeSystemkoordinator}
+                                                            />
+                                                        </Form.Group>
+                                                    </Form>
+                                                </>
+                                            ) : (
+                                                <div>Hallo</div>
+
+                                            )}
+                                        </Col>
+                                        <Container>
+                                            <ButtonGroup>
+                                                <Button style={button2} type="submit" onClick={this.handleSubmit}>Speichern</Button>
+                                                {' '}
+                                                <Link style={link} to={"/kraftwerksdaten" }><Button>Abbruch</Button></Link>
+                                                {/* ... */}
+                                            </ButtonGroup>
+                                        </Container>
+                                    </Row>
+                                </Container>
+                            </div>
                         </>
                         );
-                    }
-                    }
 
-                    export default UpdateKraftwerksdaten
+    }
+}
+
+export default withRouter(UpdateKraftwerksdaten)
