@@ -83,9 +83,9 @@ export default class Mitarbeiterliste extends Component {
     }
 
     // Methode zum Aktualisieren des Mitarbeiters
-    updateMitarbeiter() {
-        const { nachname, vorname, abteilung, telefon, mail, aktuellerMitarbeiter } = this.state;
-        MitarbeiterDataService.update(aktuellerMitarbeiter.mitarbeiter_id, nachname, vorname, abteilung, telefon, mail)
+    updateMitarbeiter(mitarbeiter_id) {
+        const { nachname, vorname, abteilung, telefon, mail } = this.state;
+        MitarbeiterDataService.update(mitarbeiter_id, nachname, vorname, abteilung, telefon, mail)
             .then(response => {
                 console.log(response);
                 this.refreshList();
