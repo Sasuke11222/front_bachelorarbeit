@@ -1,296 +1,194 @@
-import React, { Component } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-
+import React, { Component } from 'react';
 import MitarbeiterDataService from "../../services/mitarbeiter.service";
-import KraftwerkeDataService from "../../services/kraftwerk.service";
-import {Button} from "react-bootstrap";
-import {Link} from "react-router-dom";
-import axios from "axios";
-import Select from "react-select";
+import {Button, Container} from "react-bootstrap";
+import {withRouter} from "../../common/with-router";
 
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                Dieses Feld ist erforderlich!
-            </div>
-        );
-    }
-};
-
-export default class AddMitarbeiter extends Component {
-
+class AddMitarbeiter extends Component {
     constructor(props) {
         super(props);
-        this.handleMitarbeiter = this.handleMitarbeiter.bind(this);
-        this.handleChangeKW_ID = this.handleChangeKW_ID.bind(this);
-        this.onChangeNachname = this.onChangeNachname.bind(this);
-        this.onChangeVorname = this.onChangeVorname.bind(this);
-        this.onChangeAbteilung = this.onChangeAbteilung.bind(this);
-        this.onChangeTelefon = this.onChangeTelefon.bind(this);
-        this.onChangeMail = this.onChangeMail.bind(this);
-
         this.state = {
-            nachname: "",
-            vorname: "",
-            abteilung: "",
-            telefon: "",
-            mail: "",
-            kw_id: '',
-            kraftwerk_name: "",
-            successful: false,
-            message: ""
+            mitarbeiter: {
+                nachname: "",
+                vorname: "",
+                abteilung: "",
+                telefon: "",
+                mail: "",
+                kw_id: {
+                    kw_id: "",
+                    kraftwerk_name: "",
+                    kraftwerksleiter: "",
+                    zoneninstanzbesitzer: "",
+                    systemkoordinator: "",
+                }
+            },
+            kraftwerke: [],
         };
     }
 
-    async getOptions(){
-        const res = await axios.get('http://localhost:8080/api/kraftwerke')
-
-        const data = res.data
-
-        const options = data.map(d => ({
-            kw_id : d.kw_id,
-            kraftwerk_name : d.kraftwerk_name,
-
-        }))
-        this.setState({kraftwerk: options})
-
-        console.log(options);
-
+    componentDidMount() {
+        this.fetchKraftwerke();
     }
 
-    componentDidMount(){
-
-        const kraftwerk = KraftwerkeDataService.getCurrentKraftwerkforMitarbeiter();
-
-        if (kraftwerk) {
-            this.setState({
-                kw_id: kraftwerk.kw_id,
-                kraftwerk_name: kraftwerk.kraftwerk_name
-            });
-        }
-        this.getOptions()
+    //Ruft alle Kraftwerke aus der Datenbank auf und zeigt sie im Auswahlmenü an
+    fetchKraftwerke() {
+        fetch('http://localhost:8080/api/kraftwerke')
+            .then(response => response.json())
+            .then(data => { this.setState({ kraftwerke: data, }); })
+            .catch(error => { console.error('Fehler beim Abrufen der Kraftwerke:', error); });
     }
 
-    onChangeNachname(e) {
-        this.setState({
-            nachname: e.target.value
-        });
-    }
-
-    onChangeVorname(e) {
-        this.setState({
-            vorname: e.target.value
-        });
-    }
-
-    onChangeAbteilung(e) {
-        this.setState({
-            abteilung: e.target.value
-        });
-    }
-
-    onChangeTelefon(e) {
-        this.setState({
-            telefon: e.target.value
-        });
-    }
-
-    onChangeMail(e) {
-        this.setState({
-            mail: e.target.value
-        });
-    }
-
-
-    handleChangeKW_ID(e){
-        this.setState({kw_id:e.kw_id, kraftwerk_name:e.kraftwerk_name})
-    }
-
-
-    handleMitarbeiter(e) {
-        e.preventDefault();
-
-        this.setState({
-            message: "",
-            successful: false
-        });
-
-        this.form.validateAll();
-
-        if (this.checkBtn.context._errors.length === 0) {
-            KraftwerkeDataService.getCurrentKraftwerkforMitarbeiter(this.state.kw_id);
-            MitarbeiterDataService.createMitarbeiter(
-                this.state.nachname,
-                this.state.vorname,
-                this.state.abteilung,
-                this.state.telefon,
-                this.state.mail,
-                parseInt(this.state.kw_id),
-            ).then(
-                response => {
-                    this.setState({
-                        message: response.data.message,
-                        successful: true
-                    });
-                },
-                error => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
-
-                    this.setState({
-                        successful: false,
-                        message: resMessage
-                    });
+    //achtet auf Veränderungen in der Maske
+    handleChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'kw_id') {
+            const selectedKraftwerk = this.state.kraftwerke.find(kraftwerk => kraftwerk.kraftwerk_name === value);
+            this.setState(prevState => ({
+                mitarbeiter: {
+                    ...prevState.mitarbeiter,
+                    kw_id: {
+                        ...prevState.mitarbeiter.kw_id,
+                        kw_id: selectedKraftwerk.kw_id,
+                        kraftwerk_name: selectedKraftwerk.kraftwerk_name,
+                        kraftwerksleiter: selectedKraftwerk.kraftwerksleiter,
+                        zoneninstanzbesitzer: selectedKraftwerk.zoneninstanzbesitzer,
+                        systemkoordinator: selectedKraftwerk.systemkoordinator,
+                    },
                 }
-            );
+            }));
+        } else {
+            this.setState(prevState => ({
+                mitarbeiter: {
+                    ...prevState.mitarbeiter,
+                    // Entferne "mitarbeiter_id" aus dem Objekt
+                    [name]: value,
+                }
+            }));
         }
+    }
+
+    //Methode zum Abschicken des Formulares
+    handleSubmit = (event) => {
+        event.preventDefault();
+        // Hier der Code, um den Mitarbeiter in die Datenbank einzutragen
+        //Konstanten für alle Mitarbeitereigenschaften, da die CreateMitarbeiter einzelne Parameter benötigt
+        const { nachname, vorname, abteilung, telefon, mail, kw_id } = this.state.mitarbeiter;
+        MitarbeiterDataService.createMitarbeiter(nachname, vorname, abteilung, telefon, mail, kw_id);
+        this.props.router.navigate("/mitarbeiter"); // Hier erfolgt die Weiterleitung zu den Mitarbeitern
+        window.location.reload();
     }
 
     render() {
-        const link ={
-            color: '#FFF',
-            textDecoration: "none"
+        const { mitarbeiter, kraftwerke } = this.state;
+
+        const button ={
+            marginTop: "3%",
+            marginBottom: "1%",
+            width: "90%"
         }
 
-        const {kw_id} = this.state;
+        const hauptbox = {
+            maxHeight: "80%",
+            marginBottom: "50px",
+            background: "#59841d",
+            color: "#FFF",
+            borderRadius: "8px",
+        }
+
+        const formular = {
+            marginLeft: "5%",
+            marginTop: "5%",
+            color: "#000",
+        }
+
+        const eingabe1 = {
+            marginTop: "5%",
+            marginLeft: "1%",
+            width: "75%"
+        }
+
+        const eingabe2 = {
+            marginTop: "1%",
+            marginLeft: "1%",
+            width: "75%"
+        }
+
+        const auswahl = {
+            marginTop: "1%",
+            marginLeft: "1%",
+            width: "75%"
+        }
 
         return (
-            <div>
-                {this.state.successful ? (
-                    <div>
-                        <h4>Erfolgreich {this.state.vorname + " " + this.state.nachname} hinzugefügt!</h4>
-                        <Button>
-                            <Link style={link} to={"/mitarbeiter"}>
-                                Zurück
-                            </Link>
-                        </Button>
-                    </div>
-                ) : (
-                    <div className="card card-container">
-                        <img
-                            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                            alt="profile-img"
-                            className="profile-img-card"
-                        />
+            <Container style={hauptbox}>
+                <form style={formular} onSubmit={this.handleSubmit}>
+                    <label>
+                        Name:
+                        <input
+                            style={eingabe1}
+                            type="text"
+                            name="nachname"
+                            value={mitarbeiter.nachname}
+                            onChange={this.handleChange} />
+                    </label>
+                    <br />
+                    <label>
+                        Vorname:
+                        <input
+                            style={eingabe2}
+                            type="text"
+                            name="vorname"
+                            value={mitarbeiter.vorname}
+                            onChange={this.handleChange} />
+                    </label>
+                    <br />
+                    <label>
+                        Abteilung:
+                        <input
+                            style={eingabe2}
+                            type="text"
+                            name="abteilung"
+                            value={mitarbeiter.abteilung}
+                            onChange={this.handleChange} />
+                    </label>
+                    <br />
+                    <label>
+                        Mail:
+                        <input
+                            style={eingabe2}
+                            type="text"
+                            name="mail"
+                            value={mitarbeiter.mail}
+                            onChange={this.handleChange} />
+                    </label>
+                    <br />
+                    <label>
+                        Telefon:
+                        <input
+                            style={eingabe2}
+                            type="text"
+                            name="telefon"
+                            value={mitarbeiter.telefon}
+                            onChange={this.handleChange} />
+                    </label>
+                    <br />
+                    <label>
+                        Kraftwerk:
+                        <select style={auswahl} name="kw_id" value={mitarbeiter.kw_id.kraftwerk_name} onChange={this.handleChange}>
+                            <option value="">Bitte auswählen</option>
+                            {kraftwerke.map(kraftwerk => (
+                                <option key={kraftwerk.kw_id} value={kraftwerk.kraftwerk_name}>{kraftwerk.kraftwerk_name}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <br />
+                    <Button variant="primary" type="submit" style={button}>
+                        Speichern
+                    </Button>
+                </form>
+            </Container>
 
-                        <Form
-                            onSubmit={this.handleMitarbeiter}
-                            ref={c => {
-                                this.form = c;
-                            }}
-                        >
-                            {!this.state.successful && (
-                                <div>
-                                    <div className="form-group">
-                                        <label htmlFor="nachname">Name:</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            name="nachname"
-                                            value={this.state.nachname}
-                                            onChange={this.onChangeNachname}
-                                            validations={[required]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="vorname">Vorname:</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            name="vorname"
-                                            value={this.state.vorname}
-                                            onChange={this.onChangeVorname}
-                                            validations={[required]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="abteilung">Abteilung:</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            name="abteilung"
-                                            value={this.state.abteilung}
-                                            onChange={this.onChangeAbteilung}
-                                            validations={[required]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="mail">Mail:</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            name="mail"
-                                            value={this.state.mail}
-                                            onChange={this.onChangeMail}
-                                            validations={[required]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="telefon">Telefon:</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            name="telefon"
-                                            value={this.state.telefon}
-                                            onChange={this.onChangeTelefon}
-                                            validations={[required]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="kw_id">Kraftwerk: {kw_id}</label>
-                                        <Select
-                                            placeholder={"Kraftwerk"}
-                                            options={this.state.kraftwerk}
-                                            value={kw_id}
-                                            onChange={this.handleChangeKW_ID.bind(this)} />
-                                        <p>Du hast den Standort <strong>{this.state.kraftwerk_name}</strong> ausgewählt, welcher die ID <strong>{this.state.kw_id}</strong> hat</p>
-                                    </div>
-
-
-                                    <div className="form-group">
-                                        <button className="btn btn-primary btn-block">Speichern</button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {this.state.message && (
-                                <div className="form-group">
-                                    <div
-                                        className={
-                                            this.state.successful
-                                                ? "alert alert-success"
-                                                : "alert alert-danger"
-                                        }
-                                        role="alert"
-                                    >
-                                        {this.state.message}
-                                    </div>
-                                </div>
-                            )}
-                            <CheckButton
-                                style={{ display: "none" }}
-                                ref={c => {
-                                    this.checkBtn = c;
-                                }}
-                            />
-                        </Form>
-                    </div>
-                )}
-            </div>
         );
     }
 }
 
-
+export default withRouter(AddMitarbeiter);

@@ -24,7 +24,6 @@ import AddMitarbeiter from "./components/forms/AddMitarbeiter";
 import AddKomponente from "./components/forms/AddKomponente";
 import AddKomponente2 from "./components/forms/AddKomponente2";
 import TestSystemübersicht from "./components/listen/TestSystemübersicht";
-import KraftwerkeDataService from "./services/kraftwerk.service";
 
 
 class App extends Component {
@@ -66,7 +65,7 @@ class App extends Component {
   render() {
     const { currentUser} = this.state;
 
-    console.log(currentUser)
+    //console.log(currentUser)
 
     const foto = {
       marginRight: "1%",

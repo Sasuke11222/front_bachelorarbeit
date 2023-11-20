@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
-const KraftwerkSecelt = () => {
+const KraftwerkSelect = () => {
     const [kraftwerke, setKraftwerke] = useState([]);
     const [selectedKraftwerk, setSelectedKraftwerk] = useState('');
 
@@ -21,7 +21,6 @@ const KraftwerkSecelt = () => {
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group>
-                <Form.Label>Auswählen Kraftwerk:</Form.Label>
                 <Form.Control
                     as="select"
                     value={selectedKraftwerk}
@@ -33,9 +32,8 @@ const KraftwerkSecelt = () => {
                     ))}
                 </Form.Control>
             </Form.Group>
-            <Button type="submit">Start</Button>
         </Form>
     );
 };
 
-export default KraftwerkSecelt;
+export default KraftwerkSelect;

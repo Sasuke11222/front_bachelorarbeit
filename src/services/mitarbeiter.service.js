@@ -13,6 +13,7 @@ class MitarbeiterDataService {
         };
     }
     kraftwerk_name;
+
     getAll() {
         return axios.get(API_URL + 'mitarbeiter');
     }
@@ -29,31 +30,24 @@ class MitarbeiterDataService {
             });
     }
 
-    create(data) {
-        return axios.post(API_URL + 'mitarbeiter', data);
-    }
-
-    createMitarbeiter(nachname,
-    vorname, abteilung, telefon,mail, kw_id) {
-        console.log(API_URL + 'mitarbeiter/neu', nachname,
-            vorname, abteilung, telefon,mail, kw_id)
-        return axios.post(API_URL + "mitarbeiter/neu", {
-            kw_id: {
-
-            },
-            nachname,
-            vorname,
-            abteilung,
-            telefon,
-            mail
+    createMitarbeiter(nachname, vorname, abteilung, telefon, mail, kw_id) {
+        console.log(API_URL + 'mitarbeiter', nachname, vorname, abteilung, telefon, mail, kw_id)
+        return axios.post(API_URL + "mitarbeiter", {
+            kw_id: kw_id, // Verwende den übergebenen Wert der Variable 'kw_id'
+            nachname: nachname, // Verwende den übergebenen Wert der Variable 'nachname'
+            vorname: vorname, // Verwende den übergebenen Wert der Variable 'vorname'
+            abteilung: abteilung, // Verwende den übergebenen Wert der Variable 'abteilung'
+            telefon: telefon, // Verwende den übergebenen Wert der Variable 'telefon'
+            mail: mail // Verwende den übergebenen Wert der Variable 'mail'
         }).then(response => {
-            localStorage.setItem("newMitarbeiter", JSON.stringify(response.data));
             return response.data || [];
         });
     }
+
     update(mitarbeiter_id, data) {
         return axios.put(API_URL + 'mitarbeiter/', mitarbeiter_id, data);
     }
+
     delete(mitarbeiter_id) {
         return axios.delete(API_URL + 'mitarbeiter/', mitarbeiter_id);
     }
@@ -65,7 +59,7 @@ class MitarbeiterDataService {
     }
 
     getCurrentMitarbeiter() {
-        return JSON.parse(localStorage.getItem('newMitarbeiter'));;
+        return JSON.parse(localStorage.getItem('newMitarbeiter'));
     }
 
 }

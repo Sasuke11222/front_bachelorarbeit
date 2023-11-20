@@ -53,11 +53,6 @@ class UpdateKraftwerksdaten extends Component {
         }
     }
 
-    handleChange = (e) => {
-        const {id, value} = e.target;
-        this.setState({[id]: value});
-    }
-
     handleSubmit = (key, value) => {
         const { currentStandort, kraftwerksleiter, zoneninstanzbesitzer, systemkoordinator } = this.state;
 
