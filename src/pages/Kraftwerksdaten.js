@@ -1,9 +1,6 @@
 import React from "react";
-import {Button, ButtonGroup, Col, Container, Row} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import { Col, Container, Row} from "react-bootstrap";
 import Kraftwerkform from "../components/forms/Kraftwerksdaten";
-import KraftwerkeDataService from "../services/kraftwerk.service";
-import SpinnerKraftwerk from "../components/spinner/SpinnerKraftwerk";
 
 
 class Kraftwerksdaten extends React.Component {

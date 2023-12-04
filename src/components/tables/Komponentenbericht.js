@@ -1,14 +1,16 @@
 import React from "react";
 import "../../App.css";
 
-import ITElementMitFilterUndDetails from "./IT-ElementMitFilterUndDetails";
+import KomponentenTabelle from "./KomponentenTabelle";
 
 
 class Komponentenbericht extends React.Component{
     render() {
 
         return(
-            <ITElementMitFilterUndDetails/>
+            <div>
+                <KomponentenTabelle/>
+            </div>
         )
     }
 }

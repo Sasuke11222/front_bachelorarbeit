@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import KraftwerkeDataService from "../services/kraftwerk.service";
-import SpinnerKraftwerk from "../components/spinner/SpinnerKraftwerk";
+import StandortSelect from "../components/spinner/StandortSelect";
+
 class Hauptseite extends Component {
     constructor(props) {
     super(props);
@@ -11,12 +12,6 @@ class Hauptseite extends Component {
         currentStandort: undefined,
     };
 }
-
-/*
-    componentWillUnmount() {
-        localStorage.clear(); // Lokalen Speicher löschen
-    }
- */
 
     componentDidMount() {
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
@@ -46,18 +41,18 @@ class Hauptseite extends Component {
 
         const container2 = {
             width: "300px",
-            height: "750px",
+            height: "700px",
             maxHeight: "95%",
             background: "#54616c",
             borderRadius: "6px",
             position: "absolute",
             left: "23%",
-            color: "#000"
+            color: "#000",
         }
 
         const container3 = {
             width: "300px",
-            height: "750px",
+            height: "700px",
             maxHeight: "750px",
             background: "#54616c",
             borderRadius: "6px",
@@ -68,7 +63,7 @@ class Hauptseite extends Component {
 
         const container4 = {
             width: "300px",
-            height: "750px",
+            height: "700px",
             maxHeight: "750px",
             background: "#54616c",
             borderRadius: "6px",
@@ -78,6 +73,7 @@ class Hauptseite extends Component {
         }
 
         const container5 = {
+            marginTop: "5%",
             background: "#FFF"
         }
 
@@ -213,7 +209,7 @@ class Hauptseite extends Component {
                                 </>
                                 ) : (
                                     <>
-                                        <SpinnerKraftwerk/>
+                                        <StandortSelect/>
                                     </>
                                 )}
                             </Col>

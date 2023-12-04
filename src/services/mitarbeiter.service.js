@@ -31,14 +31,13 @@ class MitarbeiterDataService {
     }
 
     createMitarbeiter(nachname, vorname, abteilung, telefon, mail, kw_id) {
-        console.log(API_URL + 'mitarbeiter', nachname, vorname, abteilung, telefon, mail, kw_id)
-        return axios.post(API_URL + "mitarbeiter", {
-            kw_id: kw_id, // Verwende den übergebenen Wert der Variable 'kw_id'
-            nachname: nachname, // Verwende den übergebenen Wert der Variable 'nachname'
-            vorname: vorname, // Verwende den übergebenen Wert der Variable 'vorname'
-            abteilung: abteilung, // Verwende den übergebenen Wert der Variable 'abteilung'
-            telefon: telefon, // Verwende den übergebenen Wert der Variable 'telefon'
-            mail: mail // Verwende den übergebenen Wert der Variable 'mail'
+        return axios.post(API_URL + "neumitarbeiter", {
+            kw_id: kw_id, // Use the value of the 'kw_id' property of the 'mitarbeiter' object
+            nachname: nachname,
+            vorname: vorname,
+            abteilung: abteilung,
+            telefon: telefon,
+            mail: mail
         }).then(response => {
             return response.data || [];
         });
@@ -49,11 +48,6 @@ class MitarbeiterDataService {
     }
 
     delete(mitarbeiter_id) {
-        return axios.delete(API_URL + 'mitarbeiter/', mitarbeiter_id);
-    }
-
-    deleteMitarbeiterByID(mitarbeiter_id) {
-        console.log(API_URL + 'mitarbeiter/' + mitarbeiter_id )
         return axios
             .delete(API_URL + 'mitarbeiter/' + mitarbeiter_id );
     }

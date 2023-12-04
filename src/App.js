@@ -17,13 +17,38 @@ import Systemuebersicht from "./pages/Systemuebersicht";
 import Mitarbeiter from "./pages/Mitarbeiter";
 import Systemhersteller from "./pages/Systemhersteller";
 import AddSystemhersteller from "./components/forms/AddSystemhersteller";
-import Test from "./pages/Test";
-import Test2 from "./pages/Test2"
 import Kraftwerksdaten from "./pages/Kraftwerksdaten";
 import AddMitarbeiter from "./components/forms/AddMitarbeiter";
-import AddKomponente from "./components/forms/AddKomponente";
-import AddKomponente2 from "./components/forms/AddKomponente2";
-import TestSystemübersicht from "./components/listen/TestSystemübersicht";
+import AddKraftwerk from "./components/forms/AddKraftwerk";
+import AddUSB from "./components/forms/AddUSB";
+import USBListe from "./components/listen/USBListe";
+import AddRJ45 from "./components/forms/AddRJ45";
+import RJ45Liste from "./components/listen/RJ45Liste";
+import AddFirewall from "./components/forms/AddFirewall";
+import FirewallListe from "./components/listen/FirewallListe";
+import AddVirenschutzhersteller from "./components/forms/AddVirenschutzhersteller";
+import VirenschutzherstellerListe from "./components/listen/VirenschutzherstellerListe";
+import KraftwerkListe from "./components/listen/KraftwerkListe";
+import VirenschutzstatusListe from "./components/listen/VirenschutzstatusListe";
+import AddVirenschutz from "./components/forms/AddVirenschutz";
+import AddSystemtyp from "./components/forms/AddSystemtyp";
+import SystemtypListe from "./components/listen/SystemtypListe";
+import SystemeinheitListe from "./components/listen/SystemeinheitListe";
+import AddSystemeinheit from "./components/forms/AddSystemeinheit";
+import AddOffice from "./components/forms/AddOffice";
+import AddZone from "./components/forms/AddZone";
+import OfficeListe from "./components/listen/OfficeListe";
+import AddKontotyp from "./components/forms/AddKontotyp";
+import AddKrit from "./components/forms/AddKrit";
+import AddBetriebssystem from "./components/forms/AddBetriebssystem";
+import AddKontoart from "./components/forms/AddKontoart";
+import KritListe from "./components/listen/KritListe";
+import ZoneListe from "./components/listen/ZoneListe";
+import BetriebssystemListe from "./components/listen/BetriebssystemListe";
+import KontotypListe from "./components/listen/KontotypListe";
+import KontoartListe from "./components/listen/KontoartListe";
+import AddSystem from "./components/forms/AddSystem";
+import AddElement from "./components/forms/AddElement";
 
 
 class App extends Component {
@@ -65,7 +90,9 @@ class App extends Component {
   render() {
     const { currentUser} = this.state;
 
-    //console.log(currentUser)
+    const navitem = {
+        color: "#FFF"
+    }
 
     const foto = {
       marginRight: "1%",
@@ -76,6 +103,11 @@ class App extends Component {
       background: "#0067ac",
       color: "#FFF",
     }
+    /*
+    <Link to={"/user"} className="nav-link">
+                  User
+                </Link>
+     */
 
     return (
       <div>
@@ -85,9 +117,6 @@ class App extends Component {
           <div className="navbar-nav mr-auto">
             {currentUser && (
               <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
               </li>
             )}
           </div>
@@ -107,15 +136,9 @@ class App extends Component {
             </div>
           ) : (
             <div className="navbar-nav ml-auto">
-              <li className="nav-item">
+              <li style={navitem} >
                 <Link to={"/login"} className="nav-link">
                   Login
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Registrieren
                 </Link>
               </li>
             </div>
@@ -128,20 +151,45 @@ class App extends Component {
             <Route path="/" element={<Home />} />
             <Route path="/user" element={<Home />} />
             <Route path="/hauptseite" element={<Hauptseite />} />
-            <Route path="/test" element={<Test />} />
-              <Route path="/test2" element={<Test2 />} />
-              <Route path="/systemtest" element={<TestSystemübersicht />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path={"/komponentenuebersicht"} element={ <Komponentenuebersicht />} />
+              <Route path={"/addKomponente"} element={ <AddElement />} />
             <Route path="/systemuebersicht" element={<Systemuebersicht/>} />
+              <Route path="/addSystem" element={<AddSystem/>} />
             <Route path={"/mitarbeiter"} element={ <Mitarbeiter />} />
-            <Route path={"/addKomponente"} element={ <AddKomponente />} />
-            <Route path={"/addK"} element={ <AddKomponente2 />} />
             <Route path={"/systemhersteller"} element={ <Systemhersteller />} />
+              <Route path={"/addKraftwerk"} element={ <AddKraftwerk/>}/>
+              <Route path={"/Kraftwerk"} element={ <KraftwerkListe/>}/>
             <Route path={"/addSystemhersteller"} element={ <AddSystemhersteller />} />
             <Route path={"/addMitarbeiter"} element={ <AddMitarbeiter />} />
+              <Route path={"/addRJ45"} element={ <AddRJ45 />} />
+              <Route path={"/RJ45"} element={ <RJ45Liste/>} />
+              <Route path={"/addFirewall"} element={ <AddFirewall />} />
+              <Route path={"/Firewall"} element={ <FirewallListe/>} />
+              <Route path={"/addVirenschutzhersteller"} element={ <AddVirenschutzhersteller />} />
+              <Route path={"/Virenschutzhersteller"} element={ <VirenschutzherstellerListe/>} />
+              <Route path={"/addVirenschutz"} element={ <AddVirenschutz />} />
+              <Route path={"/Virenschutz"} element={ <VirenschutzstatusListe/>} />
+              <Route path={"/addSystemtyp"} element={ <AddSystemtyp />} />
+              <Route path={"/Systemtyp"} element={ <SystemtypListe/>} />
+              <Route path={"/addSystemeinheit"} element={ <AddSystemeinheit />} />
+              <Route path={"/Systemeinheit"} element={ <SystemeinheitListe/>} />
+              <Route path={"/addUSB"} element={ <AddUSB />} />
+              <Route path={"/USB"} element={ <USBListe/>} />
+              <Route path={"/addOffice"} element={ <AddOffice />} />
+              <Route path={"/Office"} element={ <OfficeListe/>} />
+              <Route path={"/addBetriebssystem"} element={ <AddBetriebssystem />} />
+              <Route path={"/Betriebssystem"} element={ <BetriebssystemListe/>} />
+              <Route path={"/addZone"} element={ <AddZone />} />
+              <Route path={"/Zone"} element={ <ZoneListe/>} />
+              <Route path={"/addKrit"} element={ <AddKrit />} />
+              <Route path={"/Krit"} element={ <KritListe/>} />
+              <Route path={"/addKontotyp"} element={ <AddKontotyp />} />
+              <Route path={"/Kontotyp"} element={ <KontotypListe/>} />
+              <Route path={"/addKontoart"} element={ <AddKontoart />} />
+              <Route path={"/Kontoart"} element={ <KontoartListe/>} />
             <Route path={"/kraftwerksdaten"} element={ <Kraftwerksdaten />} />
             <Route path={"/updatekraftwerksdaten"} element={ <UpdateKraftwerksdaten />} />
           </Routes>

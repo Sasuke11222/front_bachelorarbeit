@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import {Button, Col, Container, Row} from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Komponentenbericht from "../components/tables/Komponentenbericht";
 import KraftwerkeDataService from "../services/kraftwerk.service";
 import {withRouter} from "../common/with-router";
+import ITElementMitFilterUndDetails from "../components/tables/ITElementMitFilterUndDetails";
 
 
 
@@ -29,8 +30,8 @@ class Komponentenuebersicht extends Component {
     }
     render() {
         const hauptbox = {
-            maxWidth: "200%",
-            marginBottom: "50px",
+            maxWidth: "100%",
+            marginBottom: "25px",
             background: "#59841d",
             color: "#FFF",
             borderRadius: "8px",
@@ -38,8 +39,8 @@ class Komponentenuebersicht extends Component {
 
 
         const container1 = {
-            marginTop: "100px",
-            height: "800px"
+            marginTop: "50px",
+            maxHeight: "100%",
         }
 
 
@@ -82,21 +83,21 @@ class Komponentenuebersicht extends Component {
             <>
                 <div className="komponentenuebersicht">
                     <Container style={container1}>
-                        <Row>
-                            <Col style={hauptbox}>
+                        <div>
+                            <div style={hauptbox}>
                                 {currentStandort ? (
                                     <>
                                         <div>
                                             <h3 style={h3}>Komponentenübersicht: {currentStandort}</h3>
                                         </div>
                                         <Container>
-                                            <Komponentenbericht/>
+                                            <ITElementMitFilterUndDetails/>
                                         </Container>
                                     </>
                                 ) : (
                                     <div>Hallo</div>
                                 )}
-                            </Col>
+                            </div>
                             <Container>
                                 <Button style={button2}>
                                     <Link
@@ -123,7 +124,7 @@ class Komponentenuebersicht extends Component {
                                     </Link>
                                 </Button>{' '}
                             </Container>
-                        </Row>
+                        </div>
                     </Container>
                 </div>
             </>

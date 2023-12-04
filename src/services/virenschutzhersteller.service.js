@@ -1,24 +1,33 @@
-import http from "../common/http-common";
+import axios from "axios";
+const API_URL = 'http://localhost:8080/api/';
 
 class VirenschutzherstellerDataService {
     getAll() {
-        return http.get("/virenschutzhersteller");
+        return axios
+            .get(API_URL + 'virenschutzhersteller');
     }
 
     get(virenschutz_hersteller_id) {
-        return http.get(`/virenschutzhersteller/${virenschutz_hersteller_id}`);
+        return axios
+            .get(API_URL + 'virenschutzhersteller/' + virenschutz_hersteller_id )
     }
 
-    create(data) {
-        return http.post("/virenschutzhersteller", data);
+    create(herstellername, version) {
+        return axios.post(API_URL + "virenschutzhersteller", {
+            herstellername,
+            version
+        }).then(response => {
+            return response.data || [];
+        });
     }
 
     update(virenschutz_hersteller_id, data) {
-        return http.put(`/virenschutzhersteller/${virenschutz_hersteller_id}`, data);
+        return axios.put(API_URL + 'virenschutzhersteller/', virenschutz_hersteller_id, data);
     }
 
     delete(virenschutz_hersteller_id) {
-        return http.delete(`/virenschutzhersteller/${virenschutz_hersteller_id}`);
+        return axios
+            .delete(API_URL + 'virenschutzhersteller/' + virenschutz_hersteller_id );
     }
 }
 

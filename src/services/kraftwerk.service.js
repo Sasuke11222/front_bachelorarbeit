@@ -8,40 +8,26 @@ class KraftwerkeDataService {
     }
 
     get(kw_id) {
-        console.log(API_URL + 'kraftwerke/' + kw_id )
         return axios
-            .get(API_URL + 'kraftwerke/' + kw_id ).then(r => {
-                localStorage.setItem('standortfürMitarbeiter', JSON.stringify(r.data));
-                return r.data || [];
-            });
-    }
-
-    getAktuellesKraftwerk(kw_id, kraftwerk_name, kraftwerksleiter, systemkoordinator, zoneninstanzbesitzer) {
-        return axios
-            .post(API_URL + "kraftwerke", {
-                kw_id,
-                kraftwerk_name,
-                kraftwerksleiter,
-                systemkoordinator,
-                zoneninstanzbesitzer
-            })
+            .get(API_URL + 'kraftwerke/' + kw_id)
             .then(response => {
-                localStorage.setItem("kraftwerk", JSON.stringify(response.data));
+                sessionStorage.setItem("kraftwerk", JSON.stringify(response.data));
                 return response.data || [];
             });
     }
 
     create(kraftwerk_name,
            kraftwerksleiter,
-           systemkoordinator,
-           zoneninstanzbesitzer) {
-        return axios
-            .post(API_URL + "kraftwerke", {
-                kraftwerk_name,
-                kraftwerksleiter,
-                systemkoordinator,
-                zoneninstanzbesitzer
-            })
+           zoneninstanzbesitzer,
+           systemkoordinator) {
+        return axios.post(API_URL + "kraftwerke", {
+            kraftwerk_name: kraftwerk_name,
+            kraftwerksleiter: kraftwerksleiter,
+            zoneninstanzbesitzer: zoneninstanzbesitzer,
+            systemkoordinator: systemkoordinator
+        }).then(response => {
+            return response.data || [];
+        });
     }
 
     updateKraftwerksdaten(
@@ -56,20 +42,20 @@ class KraftwerkeDataService {
                 kw_id,
                 kraftwerk_name,
                 kraftwerksleiter,
+                zoneninstanzbesitzer,
                 systemkoordinator,
-                zoneninstanzbesitzer
             })
             .then(response => {
                 const kraftwerk = {
                     kw_id,
                     kraftwerk_name,
                     kraftwerksleiter,
+                    zoneninstanzbesitzer,
                     systemkoordinator,
-                    zoneninstanzbesitzer
                 };
                 console.log("Daten erfolgreich aktualisiert:", JSON.stringify(kraftwerk));
-                localStorage.removeItem("kraftwerk");
-                localStorage.setItem("kraftwerk", JSON.stringify(kraftwerk));
+                sessionStorage.removeItem("kraftwerk");
+                sessionStorage.setItem("kraftwerk", JSON.stringify(kraftwerk));
                 //localStorage.setItem("kraftwerksdaten", JSON.stringify(kraftwerk));
                 return kraftwerk || [];
             });
@@ -80,15 +66,7 @@ class KraftwerkeDataService {
     }
 
     getCurrentKraftwerk() {
-        return JSON.parse(localStorage.getItem('kraftwerk'));
-    }
-
-    selectedKraftwerk(){
-        return localStorage.getItem("standortinfos");
-    }
-
-    getCurrentKraftwerkforMitarbeiter() {
-        return JSON.parse(localStorage.getItem('standortfürMitarbeiter'));;
+        return JSON.parse(sessionStorage.getItem('kraftwerk'));
     }
 
 }

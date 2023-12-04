@@ -1,9 +1,86 @@
-import React, { Component } from "react";
+import React, {Component, useState} from "react";
 
 import UserService from "../services/user.service";
-import SpinnerKraftwerk from "./spinner/SpinnerKraftwerk";
-import {Button, ButtonGroup, DropdownButton} from "react-bootstrap";
+import {Button, Dropdown, Offcanvas} from "react-bootstrap";
 import {BsGearFill} from "@react-icons/all-files/bs/BsGearFill";
+import StandortSelect from "./spinner/StandortSelect";
+
+function Menue({name, ...props}) {
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const button = {
+        align: "end",
+        marginTop: "80px",
+        marginLeft: "95%"
+    }
+    const item ={
+        marginTop: "1%",
+        color: "#ffffff",
+        backgroundColor: "#707070"
+    }
+
+    return(
+        <>
+            <Button style={button} onClick={handleShow}>
+                <BsGearFill/>
+            </Button>
+            <Offcanvas show={show} onHide={handleClose} {...props} placement={"end"}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Adminbereich</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <Dropdown.Item  href={"/register"}>Registrieren</Dropdown.Item>
+
+                    <Dropdown.Item  href={"/addKraftwerk"}>Standort hinzufügen</Dropdown.Item>
+                    <Dropdown.Item  href={"/Kraftwerk"}>Standorte verwalten</Dropdown.Item>
+
+                    <Dropdown.Item  href={"/addVirenschutzhersteller"}>Virenschutzhersteller hinzufügen</Dropdown.Item>
+                    <Dropdown.Item  href={"/Virenschutzhersteller"}>Virenschutzhersteller verwalten</Dropdown.Item>
+
+                    <Dropdown.Item  href={"/addUSB"}>USB-Status hinzufügen</Dropdown.Item>
+                    <Dropdown.Item  href={"/USB"}>USB-Status verwalten</Dropdown.Item>
+
+                    <Dropdown.Item  href={"/addFirewall"}>Firewall-Status hinzufügen</Dropdown.Item>
+                    <Dropdown.Item  href={"/Firewall"}>Firewall-Status verwalten</Dropdown.Item>
+
+                    <Dropdown.Item  href={"/addRJ45"}>RJ45-Status hinzufügen</Dropdown.Item>
+                    <Dropdown.Item  href={"/RJ45"}>RJ45-Status verwalten</Dropdown.Item>
+
+                    <Dropdown.Item  href={"/addVirenschutz"}>Virenschutz-Status hinzufügen</Dropdown.Item>
+                    <Dropdown.Item  href={"/Virenschutz"}>Virenschutz-Status verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addSystemtyp"}>Systemtyp hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Systemtyp"}>Systemtyp verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addSystemeinheit"}>Systemeinheit hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Systemeinheit"}>Systemeinheit verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addOffice"}>Office hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Office"}>Office verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addZone"}>Zone hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Zone"}>Zone verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addKrit"}>Kritikalität hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Krit"}>Kritikalität verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addKontotyp"}>Kontotyp hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Kontotyp"}>Kontotyp verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addKontoart"}>Kontoart hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Kontoart"}>Kontoart verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addBetriebssystem"}>Betriebssystem hinzufügen</Dropdown.Item>
+                    <Dropdown.Item href={"/Betriebssystem"}>Betriebssystem verwalten</Dropdown.Item>
+
+                    <Dropdown.Item href={"/addSystem"}>System hinzufügen</Dropdown.Item>
+                </Offcanvas.Body>
+            </Offcanvas>
+        </>
+    );
+}
 
 export default class Home extends Component {
     constructor(props) {
@@ -33,16 +110,10 @@ export default class Home extends Component {
         );
     }
 
-    toggleMenu = () => {
-        this.setState(prevState => ({
-            menuOpen: !prevState.menuOpen // Menüstatus umkehren
-        }));
-    }
-
     render() {
 
         const loginbox = {
-            maxHeight: "75%",
+            maxHeight: "100%",
             background: "#59841d",
             marginTop: "5%",
             height: "400px",
@@ -55,10 +126,6 @@ export default class Home extends Component {
             marginTop: "5%"
         }
 
-        const button = {
-            marginBottom: "5%",
-            marginLeft: "95%"
-        }
 
         return (
             <div className="container">
@@ -69,21 +136,10 @@ export default class Home extends Component {
                                 Bitte wählen sie einen Standort aus:
                             </p>
                             <div>
-                                <SpinnerKraftwerk/>
+                                <StandortSelect />
                             </div>
-                            {this.state.menuOpen && ( // Menü basierend auf dem Menüstatus anzeigen oder ausblenden
-                                <div>
-                                    {// Hier können Sie Ihren Menüinhalt einfügen
-                                    }
-                                    <p>Menüinhalt</p>
-                                </div>
-                            )}
                             <div>
-                                <Button style={button} onClick={this.toggleMenu}>
-                                    {// onClick-Funktion hinzufügen, um den Menüstatus zu ändern
-                                    }
-                                    <BsGearFill/>
-                                </Button>
+                                <Menue/>
                             </div>
                         </div>
                     </div>

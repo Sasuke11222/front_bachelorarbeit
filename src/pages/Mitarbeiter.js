@@ -1,7 +1,7 @@
 import React from "react";
-import {Button, ButtonGroup, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import Mitarbeiterliste from "../components/listen/Mitarbeiterliste";
+import {Button, Col, Container, Row} from "react-bootstrap";
+import MitarbeiterListe from "../components/listen/MitarbeiterListe";
 
 
 class Mitarbeiter extends React.Component {
@@ -44,7 +44,7 @@ class Mitarbeiter extends React.Component {
                     <Row>
                         <Col lg={12} style={hauptbox}>
                             <div>
-                                <Mitarbeiterliste/>
+                                <MitarbeiterListe/>
                             </div>
                         </Col>
                         <Container>

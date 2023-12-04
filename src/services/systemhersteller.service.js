@@ -6,9 +6,14 @@ class SystemherstellerDataService {
         return axios
             .get(API_URL + 'systemhersteller')
             .then(r => {
-                localStorage.setItem('allhersteller', JSON.stringify(r.data));
+                sessionStorage.setItem('hersteller', JSON.stringify(r.data));
                 return r.data || [];
             });
+    }
+
+    getAllSystemhersteller() {
+        return axios
+            .get(API_URL + 'systemhersteller')
     }
 
     deleteHerstellerByID(id) {
@@ -21,7 +26,7 @@ class SystemherstellerDataService {
         console.log(API_URL + 'systemhersteller/' + id )
         return axios
             .get(API_URL + 'systemhersteller/' + id ).then(r => {
-                localStorage.setItem('hersteller', JSON.stringify(r.data));
+                sessionStorage.setItem('hersteller', JSON.stringify(r.data));
                 return r.data || [];
             });
     }
@@ -29,6 +34,8 @@ class SystemherstellerDataService {
     create(herstellername) {
         return axios.post(API_URL + "systemhersteller", {
             herstellername,
+        }).then(response => {
+            return response.data || [];
         });
     }
 
@@ -39,7 +46,7 @@ class SystemherstellerDataService {
 
     getCurrentHersteller() {
         this.getAll();
-        return JSON.parse(localStorage.getItem('allhersteller'));;
+        return JSON.parse(sessionStorage.getItem('hersteller'));
     }
 
 }

@@ -1,156 +1,92 @@
-import React, { Component } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-
+import React, { Component } from 'react';
 import SystemherstellerDataService from "../../services/systemhersteller.service";
-import {Button} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Button, Container, Form} from "react-bootstrap";
+import {withRouter} from "../../common/with-router";
 
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                Dieses Feld ist erforderlich!
-            </div>
-        );
-    }
-};
-
-export default class AddSystemhersteller extends Component {
+class AddSystemhersteller extends Component {
     constructor(props) {
         super(props);
-        this.handleRegister = this.handleRegister.bind(this);
-        this.onChangeSystemhersteller = this.onChangeSystemhersteller.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
-            herstellername: "",
-            successful: false,
-            message: ""
+            systemhersteller: {
+                herstellername: "",
+            },
         };
     }
 
-    onChangeSystemhersteller(e) {
-        this.setState({
-            herstellername: e.target.value
-        });
+    //achtet auf Veränderungen in der Maske
+    handleChange(e) {
+        const { name, value } = e.target;
+        this.setState((prevState => ({
+            systemhersteller: {
+                ...prevState.systemhersteller,
+                [name]: value,
+            }
+        })));
     }
 
-
-    handleRegister(e) {
+    //Methode zum Abschicken des Formulares
+    handleSubmit(e) {
         e.preventDefault();
-
-        this.setState({
-            message: "",
-            successful: false
-        });
-
-        this.form.validateAll();
-
-        if (this.checkBtn.context._errors.length === 0) {
-            SystemherstellerDataService.create(
-                this.state.herstellername,
-            ).then(
-                response => {
-                    this.setState({
-                        message: response.data.message,
-                        successful: true
-                    });
-                },
-                error => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
-
-                    this.setState({
-                        successful: false,
-                        message: resMessage
-                    });
-                }
-            );
-        }
+        const { herstellername } = this.state.systemhersteller;
+        SystemherstellerDataService.create(herstellername)
+            .then(response => {
+                this.setState({
+                    herstellername: "",
+                });
+                this.props.router.navigate("/systemhersteller");
+                window.location.reload();
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     render() {
-        const link ={
-            color: '#FFF',
-            textDecoration: "none"
+        const { systemhersteller } = this.state;
+
+        const button ={
+            marginTop: "3%",
+            marginBottom: "1%",
+            width: "75%"
+        }
+
+        const hauptbox = {
+            maxHeight: "80%",
+            marginBottom: "50px",
+            background: "#59841d",
+            color: "#FFF",
+            borderRadius: "8px",
+        }
+
+        const formular = {
+            marginLeft: "5%",
+            marginTop: "5%",
+            color: "#FFF",
+        }
+
+        const eingabe = {
+            marginTop: "1%",
+            width: "75%"
         }
 
         return (
-            <div className="col-md-12">
-                {this.state.successful ? (
-                    <div>
-                        <h4>Erfolgreich {this.state.herstellername} hinzugefügt!</h4>
-                        <Button>
-                            <Link to={"/systemhersteller"}  onClick={this.forceUpdate} style={link}>
-                                Zurück
-                            </Link>
-                        </Button>
-                    </div>
-                ) : (
-                <div className="card card-container">
-                    <img
-                        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                        alt="profile-img"
-                        className="profile-img-card"
-                    />
-
-                    <Form
-                        onSubmit={this.handleRegister}
-                        ref={c => {
-                            this.form = c;
-                        }}
-                    >
-                        {!this.state.successful && (
-                            <div>
-                                <div className="form-group">
-                                    <label htmlFor="herstellername">Systemhersteller:</label>
-                                    <Input
-                                        type="text"
-                                        className="form-control"
-                                        name="herstellername"
-                                        value={this.state.herstellername}
-                                        onChange={this.onChangeSystemhersteller}
-                                        validations={[required]}
-                                    />
-                                </div>
-
-
-                                <div className="form-group">
-                                    <button className="btn btn-primary btn-block">Speichern</button>
-                                </div>
-                            </div>
-                        )}
-
-                        {this.state.message && (
-                            <div className="form-group">
-                                <div
-                                    className={
-                                        this.state.successful
-                                            ? "alert alert-success"
-                                            : "alert alert-danger"
-                                    }
-                                    role="alert"
-                                >
-                                    {this.state.message}
-                                </div>
-                            </div>
-                        )}
-                        <CheckButton
-                            style={{ display: "none" }}
-                            ref={c => {
-                                this.checkBtn = c;
-                            }}
-                        />
-                    </Form>
-                </div>
-                )}
-            </div>
+            <Container style={hauptbox}>
+                <h2>Neuer Systemhersteller</h2>
+                <Form style={formular} onSubmit={this.handleSubmit}>
+                    <Form.Group controlId="herstellername">
+                        <Form.Label><strong>Herstellername:</strong></Form.Label>
+                        <Form.Control style={eingabe} type="text" name="herstellername" value={systemhersteller.herstellername} onChange={this.handleChange} required />
+                    </Form.Group>
+                    <Button style={button} type="submit">
+                        Hinzufügen
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 }
 
+export default withRouter(AddSystemhersteller);

@@ -4,6 +4,8 @@ import {Row, Container, Button} from "react-bootstrap";
 
 import Col from "react-bootstrap/Col";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
+import USBDataService from "../../services/usb.service";
+import KomponentDataService from "../../services/komponenten.service";
 
 //Seite für Generierung der Systemübersicht
 export default class Systemuebersichtsliste extends Component {
@@ -23,11 +25,7 @@ export default class Systemuebersichtsliste extends Component {
     }
 
     componentDidMount() {
-
-
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
-
-
         if (kraftwerk) {
             this.setState({
                 currentStandort: kraftwerk,
@@ -35,8 +33,7 @@ export default class Systemuebersichtsliste extends Component {
         }
 
         const filteredsystem = SystemDataService.getCurrentSystem();
-
-        if (kraftwerk.kw_id === 7) {
+        if (kraftwerk.kw_id === 13) {
             SystemDataService.getAll()
                 .then(response => {
                     this.setState({
@@ -52,6 +49,7 @@ export default class Systemuebersichtsliste extends Component {
                 filteredSysteme: filteredsystem,
             });}
     }
+
     refreshList() {
         this.setState({
             aktuellesSystem: null,
@@ -118,7 +116,7 @@ export default class Systemuebersichtsliste extends Component {
                                 <h3 style={h3}>Systemübersicht: {currentStandort.kraftwerk_name}</h3>
                             </div>
                             {filteredSysteme ? (
-                                console.log(filteredSysteme),
+                                //console.log(filteredSysteme),
                                 <>
                                     <Row>
                                         <div className="col-md-6">
@@ -171,12 +169,6 @@ export default class Systemuebersichtsliste extends Component {
                                                     </div>
                                                     <div>
                                                         <label>
-                                                            <strong>Block:</strong>
-                                                        </label>{" "}
-                                                        {aktuellesSystem.block}
-                                                    </div>
-                                                    <div>
-                                                        <label>
                                                             <strong>Cluster gemäß IT-SIG/VGB S175:</strong>
                                                         </label>{" "}
                                                         {aktuellesSystem.systemtyp_id.systemtyp_name}
@@ -225,7 +217,7 @@ export default class Systemuebersichtsliste extends Component {
                                                     </div>
                                                     <div>
                                                         <label>
-                                                            <strong>(geplante) einbindung ins PDN:</strong>
+                                                            <strong>(geplante) Einbindung ins PDN:</strong>
                                                         </label>{" "}
                                                         {aktuellesSystem.pdndate}
                                                     </div>
@@ -264,6 +256,7 @@ export default class Systemuebersichtsliste extends Component {
                                 }
                             >
                                 <div className="modal-content" style={moral}>
+
                                     <Row>
                                         <Col md={16} className="mb-2">
                                             <div>

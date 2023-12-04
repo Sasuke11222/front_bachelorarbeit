@@ -3,13 +3,14 @@ import {Row, Container, Button} from "react-bootstrap";
 import SystemherstellerDataService from "../../services/systemhersteller.service";
 import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
-
+import MitarbeiterDataService from "../../services/mitarbeiter.service";
 
 //Seite für Generierung der Systemherstellerübersicht
-export default class SystemherstellerList extends Component {
+export default class Systemherstellerlist extends Component {
 
     constructor(props) {
         super(props);
+        this.retrieveSystemhersteller = this.retrieveSystemhersteller.bind(this);
         this.refreshList = this.refreshList.bind(this);
         this.setActiveHersteller = this.setActiveHersteller.bind(this);
 
@@ -27,15 +28,26 @@ export default class SystemherstellerList extends Component {
     deleteSystemhersteller(systemhersteller_id) {
         SystemherstellerDataService.deleteHerstellerByID(systemhersteller_id)
             .then(response => {
-                // Handle success
                 console.log(response);
-                window.location.reload();
+                this.refreshList();
             })
             .catch(error => {
-                // Handle error
                 console.log(error);
             });
+    }
 
+    // Methode zum Aktualisieren des Systemherstellers
+    updateMitarbeiter(systemhersteller_id) {
+        const { herstellername } = this.state;
+        MitarbeiterDataService.update(systemhersteller_id, herstellername)
+            .then(response => {
+                console.log(response);
+                window.location.reload();
+                this.refreshList();
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     componentDidMount() {
@@ -47,22 +59,24 @@ export default class SystemherstellerList extends Component {
             });
         }
 
+        this.retrieveSystemhersteller();
+    }
+
+    refreshList() {
+        this.retrieveSystemhersteller();
+        this.setState({
+            aktuellerHersteller: null,
+            currentIndex: -1
+        });
+    }
+
+    retrieveSystemhersteller() {
         const hersteller = SystemherstellerDataService.getCurrentHersteller()
         if (hersteller) {
             this.setState({
                 hersteller: hersteller,
             });
         }
-
-
-    }
-
-    refreshList() {
-
-        this.setState({
-            aktuellerHersteller: null,
-            currentIndex: -1
-        });
     }
 
     setActiveHersteller(hersteller, index) {
@@ -127,7 +141,8 @@ export default class SystemherstellerList extends Component {
                                                 {aktuellerHersteller.herstellername}
                                             </div>
                                             <Button
-                                                onClick={() => this.deleteSystemhersteller(aktuellerHersteller.id)}
+                                                variant="danger"
+                                                onClick={() => this.deleteSystemhersteller(aktuellerHersteller.systemhersteller_id, currentIndex)}
                                             >
                                                 <FaTrashAlt/>
                                             </Button>

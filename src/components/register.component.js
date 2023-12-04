@@ -5,6 +5,7 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
 import AuthService from "../services/auth.service";
+import {Button} from "react-bootstrap";
 
 const required = value => {
   if (!value) {
@@ -192,6 +193,7 @@ export default class Register extends Component {
                 >
                   {this.state.message}
                 </div>
+                  <Button href={"/"}>Zurück</Button>
               </div>
             )}
             <CheckButton
