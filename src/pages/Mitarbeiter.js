@@ -2,10 +2,38 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import MitarbeiterListe from "../components/listen/MitarbeiterListe";
+import AuthService from "../services/auth.service";
 
 
 class Mitarbeiter extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            disabled: true,
+        };
+    }
+
+    componentDidMount(){
+
+        const user = AuthService.getCurrentUser();
+
+        if (!user) {
+            this.setState({
+                currentUser: null,
+                disabled: true,
+            });
+        } else {
+            this.setState({
+                currentUser: user,
+                disabled: !user.roles.includes("ROLE_ADMIN") && !user.roles.includes("ROLE_MODERATOR"),
+            });
+        }
+    }
     render() {
+        const {disabled} = this.state;
+
         const hauptbox = {
             maxHeight: "80%",
             marginBottom: "50px",
@@ -48,7 +76,7 @@ class Mitarbeiter extends React.Component {
                             </div>
                         </Col>
                         <Container>
-                                <Button style={button2} >
+                                <Button style={button2} disabled={disabled}>
                                     <Link
                                         style={link}
                                         className="navbar-link"

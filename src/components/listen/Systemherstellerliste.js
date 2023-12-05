@@ -4,6 +4,7 @@ import SystemherstellerDataService from "../../services/systemhersteller.service
 import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
 import MitarbeiterDataService from "../../services/mitarbeiter.service";
+import AuthService from "../../services/auth.service";
 
 //Seite für Generierung der Systemherstellerübersicht
 export default class Systemherstellerlist extends Component {
@@ -22,6 +23,7 @@ export default class Systemherstellerlist extends Component {
             aktuellerHersteller: null, //setzt aktuellen Hersteller auf null, da man erst auswählen muss
             currentIndex: -1,
             currentStandort: undefined,
+            disabled: true,
         };
     }
 
@@ -59,6 +61,20 @@ export default class Systemherstellerlist extends Component {
             });
         }
 
+        const user = AuthService.getCurrentUser();
+
+        if (!user) {
+            this.setState({
+                currentUser: null,
+                disabled: true,
+            });
+        } else {
+            this.setState({
+                currentUser: user,
+                disabled: !user.roles.includes("ROLE_ADMIN") && !user.roles.includes("ROLE_MODERATOR"),
+            });
+        }
+
         this.retrieveSystemhersteller();
     }
 
@@ -87,7 +103,7 @@ export default class Systemherstellerlist extends Component {
     }
 
     render() {
-        const { hersteller, aktuellerHersteller, currentIndex, currentStandort } = this.state;
+        const { hersteller, aktuellerHersteller, currentIndex, currentStandort, disabled } = this.state;
 
         const totalHersteller = hersteller.length;
 
@@ -141,6 +157,7 @@ export default class Systemherstellerlist extends Component {
                                                 {aktuellerHersteller.herstellername}
                                             </div>
                                             <Button
+                                                disabled={disabled}
                                                 variant="danger"
                                                 onClick={() => this.deleteSystemhersteller(aktuellerHersteller.systemhersteller_id, currentIndex)}
                                             >

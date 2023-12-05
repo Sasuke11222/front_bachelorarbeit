@@ -7,10 +7,9 @@ class SystemDataService {
     constructor(props) {
 
         this.state = {
-           currentStandort: undefined,
-                   };
+            currentStandort: undefined,
+        };
     }
-    //currentStandort = parseInt(localStorage.getItem("kw_id"));
     currentStandort = KraftwerkeDataService.getCurrentKraftwerk();
 
     getAll() {
@@ -19,8 +18,6 @@ class SystemDataService {
     }
 
     getSystembyKw_ID(kw_id) {
-        //console.log(API_URL + 'systeme/kraftwerk/' + kw_id )
-        //window.location.reload(1);
         return axios
             .get(API_URL + 'systeme/kraftwerk/' + kw_id)
             .then(response => {
@@ -36,7 +33,6 @@ class SystemDataService {
     }
 
     get(system_id) {
-        console.log(API_URL + 'systeme/' + system_id )
         return axios
             .get(API_URL + 'systeme/' + system_id ).then(r => {
                 localStorage.setItem('SystemFürKomponente', JSON.stringify(r.data));

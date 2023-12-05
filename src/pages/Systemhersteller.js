@@ -2,10 +2,37 @@ import React from "react";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Systemherstellerliste from "../components/listen/Systemherstellerliste";
+import AuthService from "../services/auth.service";
 
 
 class Systemhersteller extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            disabled: true,
+        };
+    }
+
+    componentDidMount(){
+
+        const user = AuthService.getCurrentUser();
+
+        if (!user) {
+            this.setState({
+                currentUser: null,
+                disabled: true,
+            });
+        } else {
+            this.setState({
+                currentUser: user,
+                disabled: !user.roles.includes("ROLE_ADMIN") && !user.roles.includes("ROLE_MODERATOR"),
+            });
+        }
+    }
+
     render() {
+        const {disabled} = this.state;
         const hauptbox = {
             maxHeight: "80%",
             marginBottom: "50px",
@@ -44,7 +71,7 @@ class Systemhersteller extends React.Component {
                         <Col lg={12} style={hauptbox}>
                             <div>
                                 <Systemherstellerliste/>
-                                <Button style={button2}>
+                                <Button style={button2} disabled={disabled}>
                                     <Link
                                         style={link}
                                         className="navbar-link"

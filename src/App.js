@@ -49,6 +49,9 @@ import KontotypListe from "./components/listen/KontotypListe";
 import KontoartListe from "./components/listen/KontoartListe";
 import AddSystem from "./components/forms/AddSystem";
 import AddElement from "./components/forms/AddElement";
+import BoardAdmin from "./components/board-admin.component";
+import BoardModerator from "./components/board-moderator.component";
+
 
 
 class App extends Component {
@@ -67,7 +70,7 @@ class App extends Component {
 
     if (user) {
       this.setState({
-        currentUser: user,
+          currentUser: user,
       });
     }
     
@@ -83,7 +86,7 @@ class App extends Component {
   logOut() {
     AuthService.logout();
     this.setState({
-      currentUser: undefined,
+        currentUser: undefined,
     });
   }
 
@@ -103,23 +106,11 @@ class App extends Component {
       background: "#0067ac",
       color: "#FFF",
     }
-    /*
-    <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-     */
-
     return (
       <div>
         <nav className="navbar navbar-expand" style={navbar}>
           <img height="50px" src="./images/LEAG_Logo.jpg" style={foto}/>
           Grundschutz IT-Sicherheit
-          <div className="navbar-nav mr-auto">
-            {currentUser && (
-              <li className="nav-item">
-              </li>
-            )}
-          </div>
 
           {currentUser ? (
             <div className="navbar-nav ml-auto">
@@ -145,10 +136,11 @@ class App extends Component {
           )}
         </nav>
 
-
         <div className="container mt-3">
           <Routes>
             <Route path="/" element={<Home />} />
+              <Route path="/admin" element={<BoardAdmin />} />
+              <Route path="/mod" element={<BoardModerator />} />
             <Route path="/user" element={<Home />} />
             <Route path="/hauptseite" element={<Hauptseite />} />
             <Route path="/home" element={<Home />} />

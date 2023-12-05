@@ -4,6 +4,7 @@ import {Row, Container, Button, CloseButton, Form} from "react-bootstrap";
 import {FaTrashAlt} from "@react-icons/all-files/fa/FaTrashAlt";
 import {BsGearFill} from "@react-icons/all-files/bs/BsGearFill";
 import KraftwerkDataService from "../../services/kraftwerk.service";
+import AuthService from "../../services/auth.service";
 
 
 
@@ -29,6 +30,7 @@ export default class MitarbeiterListe extends Component {
             mitarbeiter_id: null,
             showPopup: false,
             kraftwerke: [],
+            disabled: true,
         };
     }
 
@@ -38,6 +40,20 @@ export default class MitarbeiterListe extends Component {
         if (kraftwerk) {
             this.setState({
                 currentStandort: kraftwerk.kraftwerk_name,
+            });
+        }
+
+        const user = AuthService.getCurrentUser();
+
+        if (!user) {
+            this.setState({
+                currentUser: null,
+                disabled: true,
+            });
+        } else {
+            this.setState({
+                currentUser: user,
+                disabled: !user.roles.includes("ROLE_ADMIN") && !user.roles.includes("ROLE_MODERATOR"),
             });
         }
 
@@ -245,7 +261,7 @@ export default class MitarbeiterListe extends Component {
     }
 
     render() {
-        const { mitarbeiter, aktuellerMitarbeiter, currentIndex, currentStandort, kraftwerke} = this.state;
+        const { mitarbeiter, aktuellerMitarbeiter, currentIndex, currentStandort, kraftwerke, disabled} = this.state;
 
         const hauptbox = {
             height: "600px",
@@ -341,13 +357,13 @@ export default class MitarbeiterListe extends Component {
                                                 </label>
                                             </div>
                                             <div>
-                                                <Button style={button1}
+                                                <Button style={button1} disabled={disabled}
                                                         onClick={() => this.handleView(aktuellerMitarbeiter)}
                                                 >
                                                     <BsGearFill/>
                                                 </Button>
 
-                                                <Button style={button}
+                                                <Button style={button} variant="danger" disabled={disabled}
                                                         onClick={() => this.deleteMitarbeiter(aktuellerMitarbeiter.mitarbeiter_id, currentIndex)}
                                                 >
                                                     <FaTrashAlt/>

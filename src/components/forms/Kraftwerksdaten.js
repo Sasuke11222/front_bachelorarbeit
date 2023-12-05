@@ -3,6 +3,7 @@ import {Button, ButtonGroup, Col, Container, Form, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import KraftwerkeDataService from "../../services/kraftwerk.service";
 import {withRouter} from "../../common/with-router";
+import AuthService from "../../services/auth.service";
 
 
 
@@ -13,28 +14,30 @@ class Kraftwerksdaten extends Component {
 
         this.state = {
             currentStandort: undefined,
+            disabled: true,
         };
     }
 
-    /*
-    componentDidMount() { this.getKraftwerk(); }
-    async getKraftwerk() {
-        const response = await KraftwerkeDataService.getCurrentKraftwerk();
-        if (response.status === 200) {
-            const kraftwerk = response.data;
-            // Prüfen, ob sich die Werte geändert haben
-            if (JSON.stringify(this.state.currentStandort) !== JSON.stringify(kraftwerk)) {
-                this.setState({ currentStandort: kraftwerk, });
-            }
-        }
-    }
-     */
     componentDidMount() {
         const kraftwerk = KraftwerkeDataService.getCurrentKraftwerk();
 
         if (kraftwerk) {
             this.setState({
                 currentStandort: kraftwerk,
+            });
+        }
+
+        const user = AuthService.getCurrentUser();
+
+        if (!user) {
+            this.setState({
+                currentUser: null,
+                disabled: true,
+            });
+        } else {
+            this.setState({
+                currentUser: user,
+                disabled: !user.roles.includes("ROLE_ADMIN") && !user.roles.includes("ROLE_MODERATOR"),
             });
         }
 
@@ -81,7 +84,7 @@ class Kraftwerksdaten extends Component {
             marginLeft: "5%"
         }
 
-        const { currentStandort} = this.state;
+        const { currentStandort, disabled} = this.state;
 
 
 
@@ -135,7 +138,7 @@ class Kraftwerksdaten extends Component {
                             </Col>
                             <Container>
                                 <ButtonGroup>
-                                    <Button style={button2}>
+                                    <Button style={button2} disabled={disabled}>
                                         <Link
                                             style={link}
                                             className="navbar-link"

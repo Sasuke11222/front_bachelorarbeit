@@ -1,8 +1,7 @@
 import React from "react";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import Systemuebersichtsliste from "../components/listen/Systemübersicht";
-import SystemListe from "../components/listen/Systemliste";
+import SListe from "../components/listen/SListe";
 
 class Systemuebersicht extends React.Component {
 
@@ -43,7 +42,7 @@ class Systemuebersicht extends React.Component {
                     <Row>
                         <Col lg={12} style={hauptbox}>
                             <div>
-                                <SystemListe/>
+                                <SListe/>
                             </div>
                         </Col>
                         <Container>

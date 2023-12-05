@@ -110,11 +110,12 @@ class KomponentDataService {
     }
 
     getKomponentebyKw_ID(kw_id) {
-        //console.log(API_URL + 'it_element/kraftwerk/' + kw_id )
+        //console.log("KraftwerkeDataService: "+ API_URL + 'it_element/kraftwerk/' + kw_id )
         return axios
             .get(API_URL + 'it_element/kraftwerk/' + kw_id )
             .then(response => {
                 localStorage.setItem("filteredkomponenten", JSON.stringify(response.data));
+                sessionStorage.setItem("komponenten" , JSON.stringify(response.data));
                 return response.data || [];
             });
 
@@ -124,6 +125,7 @@ class KomponentDataService {
         this.getKomponentebyKw_ID(this.currentStandort.kw_id);
 
         return JSON.parse(localStorage.getItem('filteredkomponenten'));
+
     }
 
 }
