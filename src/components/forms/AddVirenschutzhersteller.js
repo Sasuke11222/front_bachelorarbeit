@@ -39,7 +39,7 @@ class AddVirenschutzhersteller extends Component {
                     herstellername: "",
                     version: ""
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Virenschutzhersteller");
                 window.location.reload();
             })
             .catch(e => {

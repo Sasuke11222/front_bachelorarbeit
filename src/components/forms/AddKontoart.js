@@ -37,7 +37,7 @@ class AddKontoart extends Component {
                 this.setState({
                     kontoarte: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Kontoart");
                 window.location.reload();
             })
             .catch(e => {

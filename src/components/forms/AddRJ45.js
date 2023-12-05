@@ -37,7 +37,7 @@ class AddRJ45 extends Component {
                 this.setState({
                     status: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/RJ45");
                 window.location.reload();
             })
             .catch(e => {

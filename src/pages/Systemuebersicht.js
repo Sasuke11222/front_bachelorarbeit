@@ -6,8 +6,9 @@ import SListe from "../components/listen/SListe";
 class Systemuebersicht extends React.Component {
 
     render() {
+
         const hauptbox = {
-            maxHeight: "80%",
+            height: "850px",
             marginBottom: "50px",
             background: "#59841d",
             color: "#FFF",
@@ -22,11 +23,9 @@ class Systemuebersicht extends React.Component {
         const button2 = {
             width:"300px",
             background: "#0067ac",
-            hover:{
-                backgroundColor:'#54616c'
-            },
-            marginBottom: "1%",
-            marginLeft: "45%"
+            position: "absolute",
+            left: "41%",
+            marginTop: "2%"
         }
 
         const link ={
@@ -37,10 +36,10 @@ class Systemuebersicht extends React.Component {
 
 
         return (
-            <div className="systemuebersicht">
+            <div className="systemuebersicht" style={hauptbox}>
                 <Container style={container1}>
                     <Row>
-                        <Col lg={12} style={hauptbox}>
+                        <Col lg={12}>
                             <div>
                                 <SListe/>
                             </div>

@@ -103,8 +103,9 @@ class App extends Component {
     }
 
     const navbar = {
-      background: "#0067ac",
-      color: "#FFF",
+        width: "100%",
+        background: "#0067ac",
+        color: "#FFF",
     }
     return (
       <div>

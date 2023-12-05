@@ -6,7 +6,7 @@ import Kraftwerkform from "../components/forms/Kraftwerksdaten";
 class Kraftwerksdaten extends React.Component {
     render() {
         const hauptbox = {
-            maxHeight: "80%",
+            height: "450px",
             marginBottom: "50px",
             background: "#59841d",
             color: "#FFF",

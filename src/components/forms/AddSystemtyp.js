@@ -37,7 +37,7 @@ class AddSystemtyp extends Component {
                 this.setState({
                     status: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Systemtyp");
                 window.location.reload();
             })
             .catch(e => {

@@ -44,25 +44,15 @@ class Kraftwerksdaten extends Component {
     }
 
     render() {
-        const hauptbox = {
-            maxWidth: "200%",
-            marginBottom: "50px",
-            background: "#59841d",
-            color: "#FFF",
-            borderRadius: "8px",
-        }
-
 
         const container1 = {
-            marginTop: "100px",
+            marginTop: "40px",
             height: "800px"
         }
 
-
-
         const h3 = {
-            marginTop: "3px",
-            marginLeft: "10px"
+            marginLeft: "10px",
+            marginBottom: "2%",
         }
 
         const link ={
@@ -73,14 +63,14 @@ class Kraftwerksdaten extends Component {
         const button2 = {
             width:"300px",
             background: "#0067ac",
-            marginTop: "10px",
-            marginLeft: "50%"
+            marginLeft: "60%",
+            marginTop: "2%",
         }
 
         const button3 = {
             width:"300px",
             background: "#0067ac",
-            marginTop: "10px",
+            marginTop: "2%",
             marginLeft: "5%"
         }
 
@@ -93,7 +83,7 @@ class Kraftwerksdaten extends Component {
                 <div>
                     <Container style={container1}>
                         <Row>
-                            <Col style={hauptbox}>
+                            <Col>
                                 {currentStandort ? (
                                     <>
                                         <div>
@@ -130,32 +120,30 @@ class Kraftwerksdaten extends Component {
                                                     value={currentStandort.systemkoordinator}
                                                 />
                                             </Form.Group>
+                                            <ButtonGroup>
+                                                <Button style={button2} disabled={disabled}>
+                                                    <Link
+                                                        style={link}
+                                                        className="navbar-link"
+                                                        to={"/updatekraftwerksdaten"}>
+                                                        Bearbeiten
+                                                    </Link>
+                                                </Button>{' '}
+                                                <Button style={button3}>
+                                                    <Link
+                                                        style={link}
+                                                        className="navbar-link"
+                                                        to={"/hauptseite"}>
+                                                        Abbruch
+                                                    </Link>
+                                                </Button>{' '}
+                                            </ButtonGroup>
                                         </Form>
                                     </>
                                 ) : (
                                     <div>Hallo</div>
                                 )}
                             </Col>
-                            <Container>
-                                <ButtonGroup>
-                                    <Button style={button2} disabled={disabled}>
-                                        <Link
-                                            style={link}
-                                            className="navbar-link"
-                                            to={"/updatekraftwerksdaten"}>
-                                            Bearbeiten
-                                        </Link>
-                                    </Button>{' '}
-                                    <Button style={button3}>
-                                        <Link
-                                            style={link}
-                                            className="navbar-link"
-                                            to={"/hauptseite"}>
-                                            Abbruch
-                                        </Link>
-                                    </Button>{' '}
-                                </ButtonGroup>
-                            </Container>
                         </Row>
                     </Container>
                 </div>

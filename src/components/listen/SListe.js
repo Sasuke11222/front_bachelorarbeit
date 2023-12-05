@@ -533,17 +533,14 @@ export default class SListe extends Component {
         const totalSysteme = systeme.length;
         if (totalSysteme === 0) return null;
 
-        const hauptbox = {
-            height: "800px",
-            maxHeight: "80%",
-            marginBottom: "50px",
-            background: "#59841d",
-            color: "#FFF",
-            borderRadius: "8px",
+        const h3 = {
+            marginTop: "3%",
+            marginBottom: "3%"
         }
 
-        const h3 = {
-            marginTop: "3px",
+        const h4 = {
+            marginLeft: "1%",
+            marginTop: "1%",
         }
 
         const text = {
@@ -592,7 +589,7 @@ export default class SListe extends Component {
         }
 
         return (
-            <div style={hauptbox}>
+            <div >
                 <Container style={container}>
                     {currentStandort ? (
                         <>
@@ -960,7 +957,7 @@ export default class SListe extends Component {
                                 </div>
                             )}
                             <div>
-                                <h4>
+                                <h4 style={h4}>
                                     <strong>{totalSysteme}</strong> Systeme
                                 </h4>
                             </div>

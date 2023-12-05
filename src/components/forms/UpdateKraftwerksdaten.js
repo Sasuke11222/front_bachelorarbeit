@@ -77,7 +77,7 @@ class UpdateKraftwerksdaten extends Component {
 
     render() {
         const hauptbox = {
-            maxWidth: "200%",
+            height: "400px",
             marginBottom: "50px",
             background: "#59841d",
             color: "#FFF",
@@ -89,8 +89,9 @@ class UpdateKraftwerksdaten extends Component {
         }
 
         const h3 = {
-            marginTop: "3px",
-            marginLeft: "10px"
+            marginTop: "2%",
+            marginLeft: "10px",
+            marginBottom: "1%"
         }
 
         const link ={
@@ -104,7 +105,8 @@ class UpdateKraftwerksdaten extends Component {
 
         const buttongroup = {
             position: "absolute",
-            marginLeft: "15%"
+            marginTop: "2%",
+            marginLeft: "27%"
             //left: "30%",
         }
 
@@ -160,27 +162,25 @@ class UpdateKraftwerksdaten extends Component {
                                                             />
                                                         </Form.Group>
                                                     </Form>
+                                                    <ButtonGroup style={buttongroup}>
+                                                        <Button style={button} type="submit" onClick={this.handleSubmit}>Speichern</Button>
+                                                        {' '}
+                                                        <Button style={button}>
+                                                            <Link
+                                                                style={link}
+                                                                to={"/kraftwerksdaten"}
+                                                            >
+                                                                Abbruch
+                                                            </Link>
+                                                        </Button>
+                                                        {' '}
+                                                    </ButtonGroup>
                                                 </>
                                             ) : (
                                                 <div>Hallo</div>
 
                                             )}
                                         </Col>
-                                        <Container>
-                                            <ButtonGroup style={buttongroup}>
-                                                <Button style={button} type="submit" onClick={this.handleSubmit}>Speichern</Button>
-                                                {' '}
-                                                <Button style={button}>
-                                                    <Link
-                                                    style={link}
-                                                    to={"/kraftwerksdaten"}
-                                                    >
-                                                        Abbruch
-                                                    </Link>
-                                                </Button>
-                                                {' '}
-                                            </ButtonGroup>
-                                        </Container>
                                     </Row>
                                 </Container>
                             </div>

@@ -1023,8 +1023,8 @@ export default class ITElementMitFilterUndDetails extends Component {
             //&& dt.modell.toLowerCase().includes(modellFilter.toLowerCase())
             && dt.systemeinheit_id.systemeinheit_name.toLowerCase().includes(systemeinheitFilter.toLowerCase())
             && dt.betriebssystem_id.betriebssystem_name.toLowerCase().includes(betriebssystemFilter.toLowerCase())
-            && dt.systemhersteller_id.herstellername.toLowerCase().includes(herstellerFilter.toLowerCase())
-            && dt.system_id.system_name.toLowerCase().includes(systemFilter.toLowerCase()));
+            && dt.systemhersteller_id.herstellername.toLowerCase().includes(herstellerFilter.toLowerCase()));
+            //&& dt.system_id.system_name.toLowerCase().includes(systemFilter.toLowerCase()));
 
         const totalIT_Elemente = filteredData.length;
 
@@ -1080,7 +1080,6 @@ export default class ITElementMitFilterUndDetails extends Component {
                             </th>
                             <th>Kurztext</th>
                             <th>System-einheit
-                                <br/>
                                 <input
                                     className="filter"
                                     value={systemeinheitFilter}
@@ -1097,7 +1096,6 @@ export default class ITElementMitFilterUndDetails extends Component {
                                 />
                             </th>
                             <th>Betriebs-system
-                                <br />
                                 <input
                                     className="filter"
                                     value={betriebssystemFilter || ''}

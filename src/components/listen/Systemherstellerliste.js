@@ -110,7 +110,17 @@ export default class Systemherstellerlist extends Component {
         if (totalHersteller === 0) return null;
 
         const h3 = {
-            marginTop: "3px",
+            marginTop: "2%",
+            marginBottom: "1%"
+        }
+
+        const button = {
+            marginTop: "2%",
+        }
+
+        const h4 = {
+            marginLeft: "1%",
+            marginTop: "1%",
         }
 
         const container = {
@@ -158,6 +168,7 @@ export default class Systemherstellerlist extends Component {
                                             </div>
                                             <Button
                                                 disabled={disabled}
+                                                style={button}
                                                 variant="danger"
                                                 onClick={() => this.deleteSystemhersteller(aktuellerHersteller.systemhersteller_id, currentIndex)}
                                             >
@@ -172,7 +183,7 @@ export default class Systemherstellerlist extends Component {
                                     )}
                                 </div>
                             </Row>
-                            <h4>
+                            <h4 style={h4}>
                                 <strong>{totalHersteller}</strong> Hersteller
                             </h4>
                         </>

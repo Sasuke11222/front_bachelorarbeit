@@ -37,7 +37,7 @@ class AddSystemeinheit extends Component {
                 this.setState({
                     status: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Systemeinheit");
                 window.location.reload();
             })
             .catch(e => {

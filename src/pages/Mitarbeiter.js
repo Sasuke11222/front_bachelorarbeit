@@ -35,7 +35,7 @@ class Mitarbeiter extends React.Component {
         const {disabled} = this.state;
 
         const hauptbox = {
-            maxHeight: "80%",
+            height: "800px",
             marginBottom: "50px",
             background: "#59841d",
             color: "#FFF",
@@ -56,7 +56,8 @@ class Mitarbeiter extends React.Component {
         const button2 = {
             width:"300px",
             background: "#0067ac",
-            marginLeft: "40%"
+            marginLeft: "40%",
+            marginTop: "3%"
         }
 
         const link ={
@@ -74,16 +75,14 @@ class Mitarbeiter extends React.Component {
                             <div>
                                 <MitarbeiterListe/>
                             </div>
-                        </Col>
-                        <Container>
-                                <Button style={button2} disabled={disabled}>
-                                    <Link
-                                        style={link}
-                                        className="navbar-link"
-                                        to={"/addMitarbeiter"}>
-                                        Hinzufügen
-                                    </Link>
-                                </Button>{' '}
+                            <Button style={button2} disabled={disabled}>
+                                <Link
+                                    style={link}
+                                    className="navbar-link"
+                                    to={"/addMitarbeiter"}>
+                                    Hinzufügen
+                                </Link>
+                            </Button>{' '}
                             <Button style={button}>
                                 <Link
                                     style={link}
@@ -92,7 +91,7 @@ class Mitarbeiter extends React.Component {
                                     Hauptseite
                                 </Link>
                             </Button>{' '}
-                        </Container>
+                        </Col>
                     </Row>
                 </Container>
             </div>

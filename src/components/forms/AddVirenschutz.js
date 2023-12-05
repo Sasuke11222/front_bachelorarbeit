@@ -37,7 +37,7 @@ class AddVirenschutz extends Component {
                 this.setState({
                     status: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Virenschutz");
                 window.location.reload();
             })
             .catch(e => {

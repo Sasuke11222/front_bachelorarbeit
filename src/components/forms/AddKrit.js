@@ -37,7 +37,7 @@ class AddKrit extends Component {
                 this.setState({
                     kritikalitaet: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Krit");
                 window.location.reload();
             })
             .catch(e => {

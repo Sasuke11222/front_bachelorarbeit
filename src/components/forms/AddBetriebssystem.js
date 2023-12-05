@@ -37,7 +37,7 @@ class AddBetriebssystem extends Component {
                 this.setState({
                     betriebssystem: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Betriebssystem");
                 window.location.reload();
             })
             .catch(e => {

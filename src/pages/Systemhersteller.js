@@ -79,18 +79,16 @@ class Systemhersteller extends React.Component {
                                         Hinzufügen
                                     </Link>
                                 </Button>{' '}
+                                <Button style={button2}>
+                                    <Link
+                                        style={link}
+                                        className="navbar-link"
+                                        to={"/hauptseite"}>
+                                        Hauptseite
+                                    </Link>
+                                </Button>{' '}
                             </div>
                         </Col>
-                        <Container>
-                            <Button style={button2}>
-                                <Link
-                                    style={link}
-                                    className="navbar-link"
-                                    to={"/hauptseite"}>
-                                    Hauptseite
-                                </Link>
-                            </Button>{' '}
-                        </Container>
                     </Row>
                 </Container>
             </div>

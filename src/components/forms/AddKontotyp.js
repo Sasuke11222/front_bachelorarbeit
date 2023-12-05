@@ -37,7 +37,7 @@ class AddKontotyp extends Component {
                 this.setState({
                     kontotype: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Kontotyp");
                 window.location.reload();
             })
             .catch(e => {

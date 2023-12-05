@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Button, Container} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import Komponentenbericht from "../components/tables/Komponentenbericht";
 import KraftwerkeDataService from "../services/kraftwerk.service";
 import {withRouter} from "../common/with-router";
 import ITElementMitFilterUndDetails from "../components/tables/ITElementMitFilterUndDetails";
@@ -30,8 +29,8 @@ class Komponentenuebersicht extends Component {
     }
     render() {
         const hauptbox = {
-            maxWidth: "100%",
-            marginBottom: "25px",
+            height: "750px",
+            marginBottom: "50px",
             background: "#59841d",
             color: "#FFF",
             borderRadius: "8px",
@@ -54,10 +53,8 @@ class Komponentenuebersicht extends Component {
         const button2 = {
             width:"300px",
             background: "#0067ac",
-            hover:{
-                backgroundColor:'#54616c'
-            },
-            marginLeft: "20px"
+            marginLeft: "20px",
+            marginBottom: "1%"
         }
 
         const link ={

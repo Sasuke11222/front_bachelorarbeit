@@ -111,9 +111,9 @@ export default class KraftwerkListe extends Component {
                 <Container style={container}>
                         <>
                             <div className="col-md-8">
-                                <h3 style={h3}>Standorte: </h3>
+                                <h3 style={h3}>Standorte </h3>
                             </div>
-                            <Row>
+                            <Row >
                                 <div className="col-md-6">
                                     <ul className="list-group">
                                         {kraftwerke &&

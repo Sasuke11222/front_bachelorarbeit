@@ -37,7 +37,7 @@ class AddOffice extends Component {
                 this.setState({
                     version: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Office");
                 window.location.reload();
             })
             .catch(e => {

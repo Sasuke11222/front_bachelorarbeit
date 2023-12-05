@@ -37,7 +37,7 @@ class AddZone extends Component {
                 this.setState({
                     zone: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/Zone");
                 window.location.reload();
             })
             .catch(e => {

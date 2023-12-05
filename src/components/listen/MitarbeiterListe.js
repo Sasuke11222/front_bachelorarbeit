@@ -263,17 +263,9 @@ export default class MitarbeiterListe extends Component {
     render() {
         const { mitarbeiter, aktuellerMitarbeiter, currentIndex, currentStandort, kraftwerke, disabled} = this.state;
 
-        const hauptbox = {
-            height: "600px",
-            maxHeight: "80%",
-            marginBottom: "50px",
-            background: "#59841d",
-            color: "#FFF",
-            borderRadius: "8px",
-        }
-
         const h3 = {
-            marginTop: "3px",
+            marginTop: "2%",
+            marginBottom: "1%"
         }
 
         const text = {
@@ -286,7 +278,6 @@ export default class MitarbeiterListe extends Component {
 
         const button = {
             marginTop: "5%",
-            background: "#ff1322",
             marginLeft: "2%"
         }
 
@@ -296,7 +287,7 @@ export default class MitarbeiterListe extends Component {
         }
 
         return (
-            <div style={hauptbox}>
+            <div >
                 <Container style={container}>
                     {currentStandort ? (
                         <>
@@ -357,7 +348,7 @@ export default class MitarbeiterListe extends Component {
                                                 </label>
                                             </div>
                                             <div>
-                                                <Button style={button1} disabled={disabled}
+                                                <Button style={button1} variant="success" disabled={disabled}
                                                         onClick={() => this.handleView(aktuellerMitarbeiter)}
                                                 >
                                                     <BsGearFill/>

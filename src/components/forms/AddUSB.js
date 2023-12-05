@@ -37,7 +37,7 @@ class AddUSB extends Component {
                 this.setState({
                     status: "",
                 });
-                this.props.router.navigate("/");
+                this.props.router.navigate("/USB");
                 window.location.reload();
             })
             .catch(e => {
